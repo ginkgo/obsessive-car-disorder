@@ -7,6 +7,8 @@
 var gameProperties = {
     screenWidth: 800,
     screenHeight: 600,
+    gameWidth: 800,
+    gameHeight: 5000,
 };
 
 var fontAssets = {
@@ -24,13 +26,18 @@ var gameState = function(game){
 gameState.prototype = {
     preload: function () {
         game.load.image(carAssets.name, carAssets.URL);
+        game.load.image(trackAssets.name, trackAssets.URL);
     },
     
     create: function () {
+        game.world.setBounds(0, 0, gameProperties.gameWidth, gameProperties.gameHeight);
         game.physics.startSystem(Phaser.Physics.P2JS);
         game.physics.p2.gravity.y = 0;
         var blockCollisionGroup = game.physics.p2.createCollisionGroup();
         game.physics.p2.updateBoundsCollisionGroup();
+
+	this.track = new Track(gameProperties.screenWidth, gameProperties.screenHeight);
+	this.track.init();
 
 	this.car = new Car(gameProperties.screenWidth, gameProperties.screenHeight);
 	this.car.init(blockCollisionGroup);
@@ -91,6 +98,9 @@ gameState.prototype = {
             if(this.wheel.wheel_collides) {
                 this.wheel.body.velocity.y -= 50;
             }
+//debugger
+
+            game.camera.x++;
         }
     },
 
