@@ -4,7 +4,7 @@
 
 "use strict"
 
-var trackAssets = { URL:'assets/drawings/earth.png', name:'track' };
+var trackAssets = { URL:'assets/drawings/road_1.png', name:'track' };
 
 function Track(width, height) {
     this.width = width;
