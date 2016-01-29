@@ -9,12 +9,6 @@ var gameProperties = {
     screenHeight: 600,
 };
 
-var graphicAssets = {
-    asteroidLarge:{URL:'assets/asteroidLarge.png', name:'asteroidLarge'},
-    asteroidMedium:{URL:'assets/asteroidMedium.png', name:'asteroidMedium'},
-    asteroidSmall:{URL:'assets/asteroidSmall.png', name:'asteroidSmall'},
-};
-
 var fontAssets = {
     counterFontStyle:{font: '20px Arial', fill: '#FFFFFF', align: 'center'},
 };
@@ -30,15 +24,11 @@ var gameState = function(game){
 gameState.prototype = {
     preload: function () {
         game.load.image(carAssets.name, carAssets.URL);
-
-        game.load.image(graphicAssets.asteroidLarge.name, graphicAssets.asteroidLarge.URL);
-        game.load.image(graphicAssets.asteroidMedium.name, graphicAssets.asteroidMedium.URL);
-        game.load.image(graphicAssets.asteroidSmall.name, graphicAssets.asteroidSmall.URL);
     },
     
     create: function () {
         game.physics.startSystem(Phaser.Physics.P2JS);
-        game.physics.p2.gravity.y = 100;
+        game.physics.p2.gravity.y = 0;
         var blockCollisionGroup = game.physics.p2.createCollisionGroup();
         game.physics.p2.updateBoundsCollisionGroup();
 
@@ -62,8 +52,6 @@ gameState.prototype = {
 
     update: function () {
        this.checkPlayerInput();
-       this.checkBoundaries(this.car.shipSprite);
-       this.checkBoundaries(this.wheel);
     },
 
     on_wheel_begin_contact: function(a, b, c, d, e) {
@@ -103,20 +91,6 @@ gameState.prototype = {
             if(this.wheel.wheel_collides) {
                 this.wheel.body.velocity.y -= 50;
             }
-        }
-    },
-
-    checkBoundaries: function (sprite) {
-        if (sprite.x < 0) {
-            sprite.x = game.width;
-        } else if (sprite.x > game.width) {
-            sprite.x = 0;
-        } 
-
-        if (sprite.y < 0) {
-            sprite.y = game.height;
-        } else if (sprite.y > game.height) {
-            sprite.y = 0;
         }
     },
 

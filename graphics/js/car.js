@@ -3,54 +3,55 @@
  */
 
 
-var carAssets = { URL:'assets/car.png', name:'car' };
+var carAssets = { URL:'assets/drawings/car.png', name:'car' };
 
 function Car(width, height) {
     this.startX = width * 0.5;
     this.startY = height * 0.5;
     this.acceleration = 200;
-    this.drag = 0.2;
+    this.drag = 0.5;
     this.maxVelocity = 300;
     this.angularVelocity = 5;
-    this.shipSprite;
+    this.carSprite;
 
     this.init = function (blockCollisionGroup) {
-        this.shipSprite = game.add.sprite(this.startX, this.startY, carAssets.name);
-        this.shipSprite.anchor.set(0.5, 0.5); 
+        this.carSprite = game.add.sprite(this.startX, this.startY, carAssets.name);
+        this.carSprite.anchor.set(0.5, 0.5); 
 
-        game.physics.p2.enable(this.shipSprite, false);
-        this.shipSprite.rotation = 1.0;
-        this.shipSprite.body.debug = true;
-        this.shipSprite.body.setCollisionGroup(blockCollisionGroup);
-        this.shipSprite.body.collides([blockCollisionGroup]);
-
-//        this.car.shipSprite.body.damping = car.drag;
+        game.physics.p2.enable(this.carSprite, false);
+        this.carSprite.rotation = 1.0;
+        this.carSprite.body.debug = true;
+        this.carSprite.body.setCollisionGroup(blockCollisionGroup);
+        this.carSprite.body.collides([blockCollisionGroup]);
+        this.carSprite.body.damping = this.drag;
 /*
-        this.car.shipSprite.body.maxVelocity.set(car.maxVelocity);
-	this.car.shipSprite.body.collideWorldBounds = true;
+debugger;
+        this.car.carSprite.body.maxVelocity.set(car.maxVelocity);
+	this.car.carSprite.body.collideWorldBounds = true;
 */
-//        this.car.shipSprite.scale = [4,4];
+        this.carSprite.scale.x = 1;
+        this.carSprite.scale.y = 1;
 
     };
 
     this.neutral = function() {
-        this.shipSprite.body.angularVelocity = 0;
-        this.shipSprite.body.velocity = 0;
+        this.carSprite.body.angularVelocity = 0;
+        this.carSprite.body.velocity = 0;
     };
 
     this.left = function() {
-        this.shipSprite.body.angularVelocity = -this.angularVelocity;
+        this.carSprite.body.angularVelocity = -this.angularVelocity;
     };
 
     this.right = function() {
-        this.shipSprite.body.angularVelocity = this.angularVelocity;
+        this.carSprite.body.angularVelocity = this.angularVelocity;
     };
 
     this.accelerate = function() {
         // Rotate the sprite before and after the thrust since the bitmap is horizontal...
-        this.shipSprite.body.angle += 90;
-        this.shipSprite.body.thrust(this.acceleration);
-        this.shipSprite.body.angle -= 90;
+        this.carSprite.body.angle += 90;
+        this.carSprite.body.thrust(this.acceleration);
+        this.carSprite.body.angle -= 90;
 
     };
 
