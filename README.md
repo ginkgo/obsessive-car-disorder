@@ -1,3 +1,3 @@
 # Obsessive Car Disorder
-# A silly driving game for Global Gamejam 2016
+A silly driving game for Global Gamejam 2016
 
