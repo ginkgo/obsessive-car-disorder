@@ -1,16 +1,16 @@
+"use strict";
+
 /*
  * Victim Object
  */
-
-"use strict"
 
 gameAssets.victimAssets = new Array();
 gameAssets.victimAssets[0] = { URL:'assets/drawings/sheep.png', name:'sheep', scale:{x : 0.07, y : 0.07} };
 gameAssets.victimAssets[1] = { URL:'assets/drawings/dead_sheep.png', name:'sheep_dead', scale:{x : 0.07, y : 0.07} };
 gameAssets.victimAssets[2] = { URL:'assets/drawings/bunny.png', name:'bunny', scale:{x : 0.07, y : 0.07} };
-gameAssets.victimAssets[3] = { URL:'assets/drawings/dead_bunny.tif', name:'bunny_dead', scale:{x : 0.07, y : 0.07} };
-gameAssets.victimAssets[4] = { URL:'assets/drawings/cat.tif', name:'cat', scale:{x : 0.07, y : 0.07} };
-gameAssets.victimAssets[5] = { URL:'assets/drawings/dead_cat.tif', name:'cat_dead', scale:{x : 0.07, y : 0.07} };
+gameAssets.victimAssets[3] = { URL:'assets/drawings/dead_bunny.png', name:'bunny_dead', scale:{x : 0.07, y : 0.07} };
+gameAssets.victimAssets[4] = { URL:'assets/drawings/cat.png', name:'cat', scale:{x : 0.07, y : 0.07} };
+gameAssets.victimAssets[5] = { URL:'assets/drawings/dead_cat.png', name:'cat_dead', scale:{x : 0.07, y : 0.07} };
 
 function Victim(hit) {
   this.hit = hit;
@@ -37,6 +37,8 @@ function Victim(hit) {
       this.sprite[i].body.onBeginContact.add(this.on_sprite_begin_contact, this.sprite[i]);
       this.sprite[i].body.onEndContact.add(this.on_sprite_end_contact, this.sprite[i]);
       this.sprite[i].body.x = 250 + i * 60;
+      //this.sprite[i].body.angularVelocity = Math.random() * 3;
+      //this.sprite[i].body.thrust(Math.random() * 50000);
     }
 
     this.myText = game.add.text(20, 40, "hello!!", fontAssets.counterFontStyle);
@@ -53,12 +55,6 @@ function Victim(hit) {
   };
 
   this.update = function() {
-    /*
-       this.sprite[i].body.angularVelocity = 1;
-       if(this.sprite[i].sprite_collides) {
-       this.sprite[i].body.velocity.y -= 50;
-       }
-     */
   };
 
   this.on_sprite_begin_contact = function(body_a, body_b, c, d, e) {

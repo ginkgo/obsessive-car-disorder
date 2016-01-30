@@ -18,6 +18,7 @@ var gameState = function(game){
   this.key_space;
   this.car;
   this.score;
+  this.sequence;
 };
 
 gameState.prototype = {
@@ -56,6 +57,7 @@ create: function () {
           this.key_space = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
           this.score = 0;
+          this.sequence = new Sequence();
         },
 
 update: function () {
@@ -93,6 +95,7 @@ render: function() {
 hit: function() {
       this.score = this.score+=1;
     },
+
 };
 
 var game = new Phaser.Game(
