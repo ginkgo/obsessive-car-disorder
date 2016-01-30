@@ -66,6 +66,25 @@ create: function () {
 
           this.score = 0;
           this.sequence = new Sequence();
+
+    this.audioInterface = new AudioInterface(  'assets/audio/intro_pre.ogg',
+                                         ['assets/audio/part1_pre.ogg',
+                                          'assets/audio/part2_pre.ogg',
+                                          'assets/audio/part3_pre.ogg',
+                                          'assets/audio/intense_pre.ogg'],
+                                        [['assets/audio/stest1.ogg',
+                                          'assets/audio/stest2.ogg',
+                                          'assets/audio/stest3.ogg'],
+                                         ['assets/audio/correct1.ogg',
+                                          'assets/audio/correct2.ogg',
+                                          'assets/audio/correct3.ogg']]);
+/*
+   var start = new Date().getTime();
+   var end = start;
+   while(end < start + 5000) {
+     end = new Date().getTime();
+  }
+*/
         },
 
 update: function () {
