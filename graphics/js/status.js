@@ -3,14 +3,6 @@
  * Game status
  */
 
-function log(msg) {
-    //document.getElementById("log").innerHTML = msg + "<br/>" + document.getElementById("log").innerHTML;
-}
-
-function info(msg) {
-    //document.getElementById("info").innerHTML = msg;
-}
-
 function randint(i) {
     return Math.floor((i + 1) * Math.random());
 }
@@ -36,18 +28,6 @@ function Choice (previous_choices) {
     return (arr.lastIndexOf(elem) >= 0);
   };
 
-  this.print = function () {
-    var option_str = "";
-    for (var i = 0; i < this.options.length; ++i) {            
-      option_str += this.options[i] + " "
-    }
-    if (this.chosen != null) {
-      info("Current option: " + option_str);
-    } else {
-      info("<font color=\"green\">New option: " + option_str + "</font>");
-    }
-  };
-
   this.choose = function (pick) {
     if (this.chosen == null) {
       this.chosen = pick;
@@ -56,19 +36,11 @@ function Choice (previous_choices) {
     }
     return true;
   };
-
-  this.isValid = function(option) {
-    return contains(this.options,option);
-  };
 }
 
 function Sequence () {
-
   this.pickColor = function(color) {
-    if (this.currChoice().isValid(color))
-    {
       this.currChoice().choose(color);
-      log("Picked " + color);
 
       this.index++;
       if (this.index >= this.choices.length) {
@@ -76,10 +48,7 @@ function Sequence () {
         if (randint(5)==0) {
           this.newChoice();
         }
-        log("<br/>--new round--<br>");
       }
-      this.currChoice().print();
-    }
   };
 
   this.currChoice = function() {
@@ -95,5 +64,4 @@ function Sequence () {
   this.index = 0;
 
   this.newChoice();
-  this.currChoice().print();
 }

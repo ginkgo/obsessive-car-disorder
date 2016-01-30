@@ -3,7 +3,7 @@
  * Main Obsessive Car Disorder Game
  */
 
-var gameProperties = { screenWidth: 800, screenHeight: 600, gameWidth: 800, gameHeight: 8000, };
+var gameProperties = { screenWidth: 800, screenHeight: 600, gameWidth: 800, gameHeight: 80000, };
 
 var fontAssets = {
 counterFontStyle:{font: '20px Arial', fill: '#FFFFFF', align: 'center'},
