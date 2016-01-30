@@ -9,7 +9,7 @@ gameAssets.carAssets[0] = { URL:'assets/drawings/car.png', name:'car' };
 function Car(gameProperties) {
   this.gameProperties = gameProperties;
   this.acceleration = 3;
-  this.angularVelocity = 3;
+  this.angularVelocity = 2;
   this.carSprite;
 
   this.init = function (blockCollisionGroup) {
@@ -25,7 +25,7 @@ function Car(gameProperties) {
     this.carSprite.rotation = 1.0;
     this.carSprite.body.setCollisionGroup(blockCollisionGroup);
     this.carSprite.body.collides([blockCollisionGroup]);
-    this.carSprite.body.damping = 1.0;
+    this.carSprite.body.damping = 0.1;
     this.carSprite.body.mass = 0.0001;
 
     //this.carSprite.body.debug = true;
@@ -38,8 +38,9 @@ function Car(gameProperties) {
 
   this.neutral = function() {
     this.carSprite.body.angularVelocity = 0;
-    this.carSprite.body.thrust(this.acceleration);
-    var maxRot = 0.5;
+      this.carSprite.body.thrust(this.acceleration*0.001);
+      this.carSprite.body.moveBackward(-500);
+    var maxRot = 0.05;
     if(this.carSprite.body.rotation>maxRot) this.carSprite.body.rotation = maxRot;
     if(this.carSprite.body.rotation<-maxRot) this.carSprite.body.rotation = -maxRot;
     if(this.carSprite.body.x<250) this.carSprite.body.x = 250;
@@ -51,11 +52,13 @@ function Car(gameProperties) {
   };
 
   this.left = function() {
-    this.carSprite.body.angularVelocity = -this.angularVelocity;
+      this.carSprite.body.angularVelocity = -this.angularVelocity;
+      this.carSprite.body.moveLeft(400);
   };
 
   this.right = function() {
     this.carSprite.body.angularVelocity = this.angularVelocity;
+      this.carSprite.body.moveRight(400);
   };
 
   this.accelerate = function() {
