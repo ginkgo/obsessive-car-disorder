@@ -2,14 +2,6 @@
 /*
  * Game status
  */
-function clear_error() {
-    //document.getElementById("error").innerHTML = "";
-}
-
-function error(msg) {
-    //document.getElementById("error").innerHTML = "<font color=\"red\">" + msg + "</font>";
-    log("<font color=\"red\">" + msg + "</font>");
-}
 
 function log(msg) {
     //document.getElementById("log").innerHTML = msg + "<br/>" + document.getElementById("log").innerHTML;
@@ -73,7 +65,6 @@ function Choice (previous_choices) {
 function Sequence () {
 
   this.pickColor = function(color) {
-    clear_error();
     if (this.currChoice().isValid(color))
     {
       this.currChoice().choose(color);
@@ -88,10 +79,6 @@ function Sequence () {
         log("<br/>--new round--<br>");
       }
       this.currChoice().print();
-    }
-    else
-    {
-      error("Not an option!");
     }
   };
 

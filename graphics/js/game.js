@@ -10,6 +10,7 @@ counterFontStyle:{font: '20px Arial', fill: '#FFFFFF', align: 'center'},
 };
 
 var gameAssets = new Object();
+var gameSheets = new Object();
 
 var gameState = function(game){
   this.key_left;
@@ -28,6 +29,13 @@ preload: function () {
             for(var ast = 0; ast < gameAssets[obj].length; ast++)
             {
               game.load.image(gameAssets[obj][ast].name, gameAssets[obj][ast].URL);
+            }
+          }
+          for(var obj in gameSheets)
+          {
+            for(var ast = 0; ast < gameSheets[obj].length; ast++)
+            {
+              game.load.spritesheet(gameSheets[obj][ast].name, gameSheets[obj][ast].URL, 500, 500);
             }
           }
          },
