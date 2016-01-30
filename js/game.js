@@ -12,6 +12,9 @@ counterFontStyle:{font: '20px Arial', fill: '#FFFFFF', align: 'center'},
 var gameAssets = new Object();
 var gameSheets = new Object();
 
+gameAssets.heartAssets = new Array();
+gameAssets.heartAssets[0] = { URL:'assets/drawings/heart.png', name:'heart' };
+
 var gameState = function(game){
   this.key_left;
   this.key_right;
@@ -20,6 +23,7 @@ var gameState = function(game){
   this.car;
   this.score;
   this.sequence;
+  this.lives;
 };
 
 gameState.prototype = {
@@ -41,6 +45,9 @@ preload: function () {
          },
 
 create: function () {
+          this.hearts = new Array();
+          this.lives = 5;
+
           game.world.setBounds(0, 0, gameProperties.gameWidth, gameProperties.gameHeight);
           game.physics.startSystem(Phaser.Physics.P2JS);
           game.physics.p2.gravity.y = 0;
@@ -49,6 +56,14 @@ create: function () {
 
           this.track = new Track(gameProperties);
           this.track.init();
+
+          for (var i = 0; i<this.lives; i++)
+          {
+            this.hearts[i] = game.add.sprite( 25*(i+1), 100 , gameAssets.heartAssets[0].name);
+            this.hearts[i].fixedToCamera = true;
+            this.hearts[i].anchor.set(0.5, 0.5); 
+            this.hearts[i].scale.x = this.hearts[i].scale.y = 0.1;
+          }
 
           this.car = new Car(gameProperties);
           this.car.init(blockCollisionGroup);
@@ -78,13 +93,6 @@ create: function () {
               ['assets/audio/correct1.ogg',
               'assets/audio/correct2.ogg',
               'assets/audio/correct3.ogg']]);
-          /*
-             var start = new Date().getTime();
-             var end = start;
-             while(end < start + 5000) {
-             end = new Date().getTime();
-             }
-           */
         },
 
 update: function () {
@@ -123,14 +131,18 @@ hit: function(score) {
        this.score += score;
 
        if(score>0) this.audioInterface.playSound(0, 0);
-       if(score<0) this.audioInterface.playSound(1, 1);
-/*
-TODO: update the music depending on how the player is doing
-<button type="button" onclick="audioInterface.switchConfig(audioConfigs[0],switchTime)">C1</button>
-<button type="button" onclick="audioInterface.switchConfig(audioConfigs[1],switchTime)">C2</button>
-<button type="button" onclick="audioInterface.switchConfig(audioConfigs[2],switchTime)">C3</button>
-<button type="button" onclick="audioInterface.switchConfig(audioConfigs[3],switchTime)">C4</button>
-*/
+       if(score<0 && this.lives>0)
+       {
+         var audioConfigs = [[1,0,0,0],
+             [0,1,0,0],
+             [0,0,1,0],
+             [0,0,0,1]];
+         var switchTime = 1.0;
+         this.lives--;
+         this.hearts[this.lives].alpha = 0;
+         this.audioInterface.playSound(1, 1);
+         this.audioInterface.switchConfig(audioConfigs[0],switchTime)
+       }
      },
 
 };
