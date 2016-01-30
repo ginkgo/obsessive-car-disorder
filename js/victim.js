@@ -22,7 +22,8 @@ function Victim(hit) {
   this.animals = [ "sheep", "bunny", "cat"];
   this.people = [ "businessman", "teenager", "old_man"];
   this.gates = [ "red", "green", "blue"];
-  this.sets = [this.animals, this.people];
+  this.sets = [this.animals, this.people, this.gates];
+  this.chosen = ["", "", ""];
   this.sprites;
   this.spriteCount = 0;
   this.blockCollisionGroup;
@@ -37,10 +38,6 @@ function Victim(hit) {
 
     this.myText = game.add.text(20, 40, "hello!!", fontAssets.counterFontStyle);
     this.myText.fixedToCamera = true;
-
-    this.chosenAnimal = "";
-    this.chosenPerson = "";
-    this.chosenGate = "";
   };
 
   this.spawnThing = function(names) {
@@ -101,25 +98,29 @@ function Victim(hit) {
 
     this.frame = 1;
 
-    var foundAnimal = this.father.animals.indexOf(this.victim) > -1;
-    var foundPerson = this.father.people.indexOf(this.victim) > -1;
-    var foundGate = this.father.gates.indexOf(this.victim) > -1;
+    var found = [
+      this.father.animals.indexOf(this.victim) > -1,
+      this.father.people.indexOf(this.victim) > -1,
+      this.father.gates.indexOf(this.victim) > -1 ]
 
-    var score = 0;
+        var score = 0;
 
-    if(foundAnimal)
+    for(var i = 0; i<found.length; i++)
     {
-      if(this.father.chosenAnimal.length == 0 )
+      if(found[i])
       {
-        this.father.chosenAnimal = this.victim;
-      }
-      else if (0 == this.father.chosenAnimal.localeCompare(this.victim))
-      {
-        score = 1;
-      }
-      else
-      {
-        score = -1;
+        if(this.father.chosen[i].length == 0 )
+        {
+          this.father.chosen[i]= this.victim;
+        }
+        else if (0 == this.father.chosen[i].localeCompare(this.victim))
+        {
+          score = 1;
+        }
+        else
+        {
+          score = -1;
+        }
       }
     }
 
