@@ -10,6 +10,7 @@ counterFontStyle:{font: '20px Arial', fill: '#FFFFFF', align: 'center'},
 };
 
 var gameAssets = new Object();
+var gameSheets = new Object();
 
 var gameState = function(game){
   this.key_left;
@@ -18,6 +19,7 @@ var gameState = function(game){
   this.key_space;
   this.car;
   this.score;
+  this.sequence;
 };
 
 gameState.prototype = {
@@ -27,6 +29,13 @@ preload: function () {
             for(var ast = 0; ast < gameAssets[obj].length; ast++)
             {
               game.load.image(gameAssets[obj][ast].name, gameAssets[obj][ast].URL);
+            }
+          }
+          for(var obj in gameSheets)
+          {
+            for(var ast = 0; ast < gameSheets[obj].length; ast++)
+            {
+              game.load.spritesheet(gameSheets[obj][ast].name, gameSheets[obj][ast].URL, 500, 500);
             }
           }
          },
@@ -56,6 +65,7 @@ create: function () {
           this.key_space = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
           this.score = 0;
+          this.sequence = new Sequence();
         },
 
 update: function () {
@@ -93,6 +103,7 @@ render: function() {
 hit: function() {
       this.score = this.score+=1;
     },
+
 };
 
 var game = new Phaser.Game(
