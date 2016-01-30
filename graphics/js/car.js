@@ -1,17 +1,15 @@
+"use strict";
 /*
  * Car Object
  */
-
-"use strict"
 
 var carAssets = { URL:'assets/drawings/car.png', name:'car' };
 
 function Car(gameProperties) {
   this.gameProperties = gameProperties;
   this.acceleration = 500;
-  this.drag = 0.9;
-  this.maxVelocity = 500;
-  this.angularVelocity = 5;
+  this.drag = 0.8;
+  this.angularVelocity = 3;
   this.carSprite;
 
   this.init = function (blockCollisionGroup) {
@@ -32,20 +30,22 @@ function Car(gameProperties) {
     //this.carSprite.body.debug = true;
 
     // Make the camera follow the Car while keeping it at the bottom of the screen.
-    game.camera.follow(this.carSprite);
+    game.camera.follow(this.carSprite, Phaser.Camera.FOLLOW_TOPDOWN);
     game.camera.deadzone = new Phaser.Rectangle(0, gameProperties.screenHeight*0.8, 
-        gameProperties.screenWidth, gameProperties.screenHeight*0.1);
+        gameProperties.screenWidth, 0);
   };
 
   this.neutral = function() {
     this.carSprite.body.angularVelocity = 0;
-    //this.carSprite.body.velocity = 0;
     this.carSprite.body.thrust(this.acceleration);
     if(this.carSprite.body.rotation>0.5) this.carSprite.body.rotation = 0.5;
     if(this.carSprite.body.rotation<-0.5) this.carSprite.body.rotation = -0.5;
+    if(this.carSprite.body.x<250) this.carSprite.body.x = 250;
+    if(this.carSprite.body.x>560) this.carSprite.body.x = 560;
 
     // Wrap the car for the next loop
-    //if(this.carSprite.body.y<100) this.carSprite.body.y = 4000;
+    //TODO: align track and car height first 
+    //if(this.carSprite.body.y<gameProperties.screenHeight*0.8) this.carSprite.body.y = 950;
   };
 
   this.left = function() {

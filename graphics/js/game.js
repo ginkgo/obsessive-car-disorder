@@ -1,8 +1,7 @@
+"use strict";
 /*
  * Main Obsessive Car Disorder Game
  */
-
-"use strict"
 
 var gameProperties = { screenWidth: 800, screenHeight: 600, gameWidth: 800, gameHeight: 5000, };
 
@@ -22,6 +21,7 @@ gameState.prototype = {
 preload: function () {
            game.load.image(carAssets.name, carAssets.URL);
            game.load.image(trackAssets.name, trackAssets.URL);
+           game.load.image(grassAssets.name, grassAssets.URL);
          },
 
 create: function () {
@@ -38,6 +38,7 @@ create: function () {
           this.car.init(blockCollisionGroup);
 
           this.myText = game.add.text(20, 10, "hello!!", fontAssets.counterFontStyle);
+          this.myText.fixedToCamera = true;
 
           this.ball = new Ball();
           this.ball.init(blockCollisionGroup);
