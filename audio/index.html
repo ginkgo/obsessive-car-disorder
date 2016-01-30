@@ -7,29 +7,7 @@
 <p id="info"></p>
 
 <button type="button" onclick="audioInterface.startMusic()">play</button>
-<!-- <button type="button" onclick="sequ
-var audioInterface = null;
 
-var audioConfigs = [[1,0,0,0],
-                    [0,1,0,0],
-                    [0,0,1,0],
-                    [0,0,0,1]];
-var switchTime = 1.0;
-
-function init() {
-    audioInterface = new AudioInterface('assets/intro_pre.ogg',
-                                        ['assets/part1_pre.ogg',
-                                         'assets/part2_pre.ogg',
-                                         'assets/part3_pre.ogg',
-                                         'assets/intense_pre.ogg'],
-                                        [['assets/stest1.ogg',
-                                          'assets/stest2.ogg',
-                                          'assets/stest3.ogg'],
-                                         ['assets/correct1.ogg',
-                                          'assets/correct2.ogg',
-                                          'assets/correct3.ogg']]);
-}
-window.addEventListener('load', init, false);ence.pickColor('green')">green</button> -->
 <br/>
 <button type="button" onclick="audioInterface.switchConfig(audioConfigs[0],switchTime)">C1</button>
 <button type="button" onclick="audioInterface.switchConfig(audioConfigs[1],switchTime)">C2</button>
@@ -52,7 +30,7 @@ var audioConfigs = [[1,0,0,0],
                     [0,1,0,0],
                     [0,0,1,0],
                     [0,0,0,1]];
-var switchTime = 1.0;
+var switchTime = 0.25;
 
 function init() {
     audioInterface = new AudioInterface('assets/intro_pre.ogg',
