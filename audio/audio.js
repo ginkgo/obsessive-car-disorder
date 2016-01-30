@@ -1,67 +1,147 @@
 var context;
 var bufferLoader;
 
-window.addEventListener('load', init, false);
+function AudioInterface(intro, tracks, soundBanks) {
+    this.type = "audioInterface";
+    this.soundsInitialized = false;
+    this.tracksInitialized = false;
 
-function init() {
+    this.gains = []
+    this.tracks = []
+    this.introTrack = null; // handled separately
     
-    try {
-        // Fix up for prefixing
-        window.AudioContext = window.AudioContext||window.webkitAudioContext;
-        context = new AudioContext();
+    this.startTime = 0.0;
+    
+    this.sounds = [];
+    this.soundGainNode = null;
+    
+    this.init = function(intro,tracks,soundBanks) {
+        try {
+            // Fix up for prefixing
+            window.AudioContext = window.AudioContext||window.webkitAudioContext;
+            this.context = new AudioContext();
+        }
+        catch(e) {
+            alert('Web Audio API is not supported in this browser');
+            return;
+        }
 
+        trackList = tracks.concat([intro])
+        this.bankIndex = []
+        soundList = []
+        var i = 0;
+        for (bank of soundBanks) {
+            index = []
+            for (sound of bank) {
+                index.push(i++);
+                soundList.push(sound);
+            }
+            this.bankIndex.push(index);
+        }
+
+        self = this;
+        trackLoader = new BufferLoader(this.context, trackList,
+                                       function(bufferList){self.finishedLoadingTracks(bufferList)});
+        soundLoader = new BufferLoader(this.context, soundList,
+                                       function(bufferList){self.finishedLoadingSounds(bufferList)});
+
+        trackLoader.load();
+        soundLoader.load();
     }
-    catch(e) {
-        alert('Web Audio API is not supported in this browser');
-        return;
+
+    this.init(intro,tracks,soundBanks);
+   
+    this.startMusic = function () {
+        log('start');
+
+        this.startTime = this.context.currentTime + 0.02;
+        this.introTrack.loop=false;
+        this.introTrack.start(this.startTime);
+        introLength = this.introTrack.buffer.duration;
+        this.startTime += introLength;
+
+        // Queue starting of the loops ~100ms before playback
+        self = this;
+        window.setTimeout(function(){self.startLoops()}, introLength * 1000.0 - 100.0);
+        this.switchConfig(audioConfigs[0], switchTime);
     }
-    bufferLoader = new BufferLoader(context,
-                                    ['assets/xfade1-2.ogg',
-                                     'assets/xfade2-2.ogg'], finishedLoading);
-    bufferLoader.load();
-}
-
-var gains = []
-var tracks = []
-function finishedLoading(bufferList) {
-    for (i = 0; i < bufferList.length; ++i) {
-
-        tracks.push(context.createBufferSource());
-        gains.push(context.createGain());
+ 
+    this.startLoops = function() {
+        for (var track of this.tracks) {
+            track.loop=true;
+            track.start(this.startTime);
+        }
+    }
+    
+    this.switchConfig = function(audioConfig, duration) {
+        var startTime = this.context.currentTime
         
-        tracks[i].buffer = bufferList[i];    
-        tracks[i].connect(gains[i]);
-        gains[i].connect(context.destination);
+        for (var i = 0; i < this.gains.length; ++i) {
+            var start = this.gains[i].gain.value
+            var end = audioConfig[i]
+
+            this.gains[i].gain.setValueAtTime(start,startTime);
+            this.gains[i].gain.linearRampToValueAtTime(end, startTime + duration);
+        }
+    }
+    
+    this.finishedLoadingTracks = function(bufferList) {
+        // Intro
+        this.introTrack = this.context.createBufferSource();
+        this.introTrack.buffer = bufferList[bufferList.length-1];
+
+        for (i = 0; i < bufferList.length-1; ++i) {
+
+            this.tracks.push(this.context.createBufferSource());
+            this.gains.push(this.context.createGain());
+            
+            this.tracks[i].buffer = bufferList[i];
+            this.tracks[i].connect(this.gains[i]);
+            this.gains[i].connect(this.context.destination);
+            this.gains[i].gain.setValueAtTime(0.0, 0.0);
+            
+            log("track "+ (i+1) +
+                " duration: " + this.tracks[i].buffer.duration +
+                " length: " + this.tracks[i].buffer.length);
+        }
         
-        log("track "+ (i+1) +
-            " duration: " + tracks[i].buffer.duration +
-            " length: " + tracks[i].buffer.length);
+        this.introTrack.connect(this.gains[0]);
+        
+        log('loading finished');
+        this.tracksInitialized = true;
     }
-       
-    log('loading finished');
-}
+    
+    this.finishedLoadingSounds = function(bufferList)
+    {
+        log("loaded sounds")
+        for (buffer of bufferList) {
+            this.sounds.push(buffer);
+        }
+        this.soundGainNode = this.context.createGain();
+        this.soundGainNode.gain.setValueAtTime(3.0,0.0);
+        this.soundGainNode.connect(this.context.destination);
 
-function startMusic() {
-    log('start');
-
-    startTime = context.currentTime + 0.02
-    for (i = 0; i < tracks.length; ++i) {
-        tracks[i].loop=true;
-        tracks[i].start(startTime);
-        gains[i].gain.setValueAtTime(0.0, startTime);
-        gains[i].gain.linearRampToValueAtTime(1.0, startTime+1.0);
+        
+        this.soundsInitialized = true;
     }
-}
 
-var audioConfigs = [[1.0, 0.00001],
-                    [0.5, 0.5],
-                    [0.000001, 1.0]];
-var switchTime = 0.5;
+    this.playSound = function(bank)
+    {
+        var sound = this.sounds[pickRandom(this.bankIndex[bank])];
+        
+        var sourceNode = this.context.createBufferSource();
+        sourceNode.buffer = sound;
+        sourceNode.connect(this.soundGainNode);
+        sourceNode.start(0.0);
+    }
 
-function switchConfig(audioConfig, time) {
-    time = context.currentTime + time;
-    for (i = 0; i < gains.length; ++i) {
-        gains[i].gain.linearRampToValueAtTime(audioConfig[i], time);
+    this.setSoundVolume = function(volume)
+    {
+        this.soundGainNode.setValueAtTime(volume, this.context.currentTime);
+    }
+
+    this.isReady = function() {
+        return this.soundsInitialized && this.tracksInitialized;
     }
 }
 
@@ -79,4 +159,9 @@ function log(msg) {
 
 function info(msg) {
     document.getElementById("info").innerHTML = msg;
+}
+
+function pickRandom(array)
+{
+    return  array[Math.floor(Math.random() * array.length)];
 }
