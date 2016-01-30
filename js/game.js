@@ -67,24 +67,24 @@ create: function () {
           this.score = 0;
           this.sequence = new Sequence();
 
-    this.audioInterface = new AudioInterface(  'assets/audio/intro_pre.ogg',
-                                         ['assets/audio/part1_pre.ogg',
-                                          'assets/audio/part2_pre.ogg',
-                                          'assets/audio/part3_pre.ogg',
-                                          'assets/audio/intense_pre.ogg'],
-                                        [['assets/audio/stest1.ogg',
-                                          'assets/audio/stest2.ogg',
-                                          'assets/audio/stest3.ogg'],
-                                         ['assets/audio/correct1.ogg',
-                                          'assets/audio/correct2.ogg',
-                                          'assets/audio/correct3.ogg']]);
-/*
-   var start = new Date().getTime();
-   var end = start;
-   while(end < start + 5000) {
-     end = new Date().getTime();
-  }
-*/
+          this.audioInterface = new AudioInterface(  'assets/audio/intro_pre.ogg',
+              ['assets/audio/part1_pre.ogg',
+              'assets/audio/part2_pre.ogg',
+              'assets/audio/part3_pre.ogg',
+              'assets/audio/intense_pre.ogg'],
+              [['assets/audio/stest1.ogg',
+              'assets/audio/stest2.ogg',
+              'assets/audio/stest3.ogg'],
+              ['assets/audio/correct1.ogg',
+              'assets/audio/correct2.ogg',
+              'assets/audio/correct3.ogg']]);
+          /*
+             var start = new Date().getTime();
+             var end = start;
+             while(end < start + 5000) {
+             end = new Date().getTime();
+             }
+           */
         },
 
 update: function () {
@@ -119,8 +119,18 @@ render: function() {
           game.debug.body(this.ball);
         },
 
-hit: function() {
-       this.score = this.score+=1;
+hit: function(score) {
+       this.score += score;
+
+       if(score>0) this.audioInterface.playSound(0, 0);
+       if(score<0) this.audioInterface.playSound(1, 1);
+/*
+TODO: update the music depending on how the player is doing
+<button type="button" onclick="audioInterface.switchConfig(audioConfigs[0],switchTime)">C1</button>
+<button type="button" onclick="audioInterface.switchConfig(audioConfigs[1],switchTime)">C2</button>
+<button type="button" onclick="audioInterface.switchConfig(audioConfigs[2],switchTime)">C3</button>
+<button type="button" onclick="audioInterface.switchConfig(audioConfigs[3],switchTime)">C4</button>
+*/
      },
 
 };

@@ -20,11 +20,11 @@ function AudioInterface(intro, tracks, soundBanks) {
   this.sounds = [];
   this.soundGainNode = null;
 
-this.audioConfigs = [[1,0,0,0],
-                    [0,1,0,0],
-                    [0,0,1,0],
-                    [0,0,0,1]];
-this.switchTime = 1.0;
+  this.audioConfigs = [[1,0,0,0],
+    [0,1,0,0],
+    [0,0,1,0],
+    [0,0,0,1]];
+  this.switchTime = 1.0;
 
 
   this.init = function(intro,tracks,soundBanks) {
@@ -130,14 +130,17 @@ this.switchTime = 1.0;
     this.soundsInitialized = true;
   }
 
-  this.playSound = function(bank)
+  this.playSound = function(bank, idx)
   {
-    var sound = this.sounds[pickRandom(this.bankIndex[bank])];
+    if(this.soundsInitialized == true)
+    {
+      var sound = this.sounds[idx];
 
-    var sourceNode = this.context.createBufferSource();
-    sourceNode.buffer = sound;
-    sourceNode.connect(this.soundGainNode);
-    sourceNode.start(0.0);
+      var sourceNode = this.context.createBufferSource();
+      sourceNode.buffer = sound;
+      sourceNode.connect(this.soundGainNode);
+      sourceNode.start(0.0);
+    }
   }
 
   this.setSoundVolume = function(volume)

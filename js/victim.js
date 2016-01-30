@@ -40,6 +40,7 @@ function Victim(hit) {
 
     this.chosenAnimal = "";
     this.chosenPerson = "";
+    this.chosenGate = "";
   };
 
   this.spawnThing = function(names) {
@@ -100,11 +101,33 @@ function Victim(hit) {
 
     this.frame = 1;
 
+    var foundAnimal = this.father.animals.indexOf(this.victim) > -1;
+    var foundPerson = this.father.people.indexOf(this.victim) > -1;
+    var foundGate = this.father.gates.indexOf(this.victim) > -1;
+
+    var score = 0;
+
+    if(foundAnimal)
+    {
+      if(this.father.chosenAnimal.length == 0 )
+      {
+        this.father.chosenAnimal = this.victim;
+      }
+      else if (0 == this.father.chosenAnimal.localeCompare(this.victim))
+      {
+        score = 1;
+      }
+      else
+      {
+        score = -1;
+      }
+    }
+
     // Remove the collision
     this.body.setCollisionGroup(0);
     this.body.velocity = 0;
     // Invoke the callback called hit() on the object called this.hit
-    this.father.hit.hit(this.father.hit);
+    this.father.hit.hit(score);
 
     if(Math.random()>0.66) this.father.spawnThing(this.father.animals);
     if(Math.random()>0.66) this.father.spawnThing(this.father.people);
