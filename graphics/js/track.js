@@ -16,7 +16,7 @@ function Track(width, height) {
     this.trackSprite;
 
     this.init = function () {
-        this.trackSprite = game.add.tileSprite(0, 0, 20000, 20000, trackAssets.name);
+        this.trackSprite = game.add.tileSprite(50, 0, 650, 10000, trackAssets.name);
 
 //        this.trackSprite.anchor.set(0.5, 0.5); 
 //        this.trackSprite.scale.x = 0.25;
