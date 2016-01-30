@@ -8,12 +8,17 @@ gameSheets.victimAssets = new Array();
 gameSheets.victimAssets[0] = { URL:'assets/drawings/sheep_animation.png', name:'sheep', scale:{x : 0.1, y : 0.1}, };
 gameSheets.victimAssets[1] = { URL:'assets/drawings/bunny_animation.png', name:'bunny', scale:{x : 0.1, y : 0.1} };
 gameSheets.victimAssets[2] = { URL:'assets/drawings/cat_animation.png', name:'cat', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[3] = { URL:'assets/drawings/businessman_animation.png', name:'businessman', scale:{x : 0.1, y : 0.1}, };
+gameSheets.victimAssets[4] = { URL:'assets/drawings/teenager_animation.png', name:'teenager', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[5] = { URL:'assets/drawings/old_man_animation.png', name:'old_man', scale:{x : 0.1, y : 0.1} };
 
 function Victim(hit) {
   this.hit = hit;
   this.carContact = false;
   this.hitVictim = null;
   this.animals = [ "sheep", "bunny", "cat"];
+  this.people = [ "businessman", "teenager", "old_man"];
+  this.sets = [this.animals, this.people];
   this.sprites;
   this.spriteCount = 0;
   this.blockCollisionGroup;
@@ -53,7 +58,6 @@ function Victim(hit) {
       this.sprites[i].body.static = true;
       //this.sprites[i].body.angularVelocity = Math.random() * 3;
       //this.sprites[i].body.thrust(Math.random() * 50000);
-//debugger
     }
     this.lastSpawn-=500;
   }
@@ -82,7 +86,9 @@ function Victim(hit) {
     this.body.velocity = 0;
     // Invoke the callback called hit() on the object called this.hit
     this.father.hit.hit(this.father.hit);
-    this.father.spawnThing(this.father.animals);
+
+    if(Math.random()>0.5) this.father.spawnThing(this.father.animals);
+    else this.father.spawnThing(this.father.people);
   };
 
   this.on_sprite_end_contact = function(body_a, body_b, c, d, e) {
