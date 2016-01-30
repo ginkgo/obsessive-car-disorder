@@ -1,14 +1,15 @@
+"use strict";
 /*
  * Main Obsessive Car Disorder Game
  */
 
-"use strict"
-
-var gameProperties = { screenWidth: 800, screenHeight: 600, gameWidth: 800, gameHeight: 5000, };
+var gameProperties = { screenWidth: 800, screenHeight: 600, gameWidth: 800, gameHeight: 8000, };
 
 var fontAssets = {
 counterFontStyle:{font: '20px Arial', fill: '#FFFFFF', align: 'center'},
 };
+
+var gameAssets = new Object();
 
 var gameState = function(game){
   this.key_left;
@@ -16,12 +17,18 @@ var gameState = function(game){
   this.key_thrust;
   this.key_space;
   this.car;
+  this.score;
 };
 
 gameState.prototype = {
 preload: function () {
-           game.load.image(carAssets.name, carAssets.URL);
-           game.load.image(trackAssets.name, trackAssets.URL);
+          for(var obj in gameAssets)
+          {
+            for(var ast = 0; ast < gameAssets[obj].length; ast++)
+            {
+              game.load.image(gameAssets[obj][ast].name, gameAssets[obj][ast].URL);
+            }
+          }
          },
 
 create: function () {
@@ -38,18 +45,21 @@ create: function () {
           this.car.init(blockCollisionGroup);
 
           this.myText = game.add.text(20, 10, "hello!!", fontAssets.counterFontStyle);
+          this.myText.fixedToCamera = true;
 
-          this.ball = new Ball();
+          this.ball = new Victim(this);
           this.ball.init(blockCollisionGroup);
 
           this.key_left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
           this.key_right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
           this.key_thrust = game.input.keyboard.addKey(Phaser.Keyboard.UP);
           this.key_space = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+          this.score = 0;
         },
 
 update: function () {
-          this.myText.text = "...";
+          this.myText.text = "Score: " + this.score;
 
           this.car.neutral();
           if (this.key_left.isDown) {
@@ -78,7 +88,11 @@ render: function() {
           //game.debug.bodyInfo(this.car.shipSprite, 16, 24);
 
           game.debug.body(this.ball);
-        }
+        },
+
+hit: function() {
+      this.score = this.score+=1;
+    },
 };
 
 var game = new Phaser.Game(
