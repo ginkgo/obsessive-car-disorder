@@ -3,7 +3,8 @@
  * Car Object
  */
 
-var carAssets = { URL:'assets/drawings/car.png', name:'car' };
+gameAssets.carAssets = new Array();
+gameAssets.carAssets[0] = { URL:'assets/drawings/car.png', name:'car' };
 
 function Car(gameProperties) {
   this.gameProperties = gameProperties;
@@ -15,7 +16,7 @@ function Car(gameProperties) {
     this.carSprite = game.add.sprite(
         this.gameProperties.gameWidth * 0.5,
         this.gameProperties.gameHeight - 200 ,
-        carAssets.name);
+        gameAssets.carAssets[0].name);
 
     this.carSprite.anchor.set(0.5, 0.5); 
     this.carSprite.scale.x = 0.25;

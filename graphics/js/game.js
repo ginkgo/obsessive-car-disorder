@@ -9,6 +9,8 @@ var fontAssets = {
 counterFontStyle:{font: '20px Arial', fill: '#FFFFFF', align: 'center'},
 };
 
+var gameAssets = new Object();
+
 var gameState = function(game){
   this.key_left;
   this.key_right;
@@ -20,9 +22,13 @@ var gameState = function(game){
 
 gameState.prototype = {
 preload: function () {
-           game.load.image(carAssets.name, carAssets.URL);
-           game.load.image(trackAssets.name, trackAssets.URL);
-           game.load.image(grassAssets.name, grassAssets.URL);
+          for(var obj in gameAssets)
+          {
+            for(var ast = 0; ast < gameAssets[obj].length; ast++)
+            {
+              game.load.image(gameAssets[obj][ast].name, gameAssets[obj][ast].URL);
+            }
+          }
          },
 
 create: function () {

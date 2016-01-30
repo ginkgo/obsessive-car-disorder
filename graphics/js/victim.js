@@ -4,16 +4,20 @@
 
 "use strict"
 
-var ballAssets = { URL:'assets/drawings/ball.png', name:'ball' };
+gameAssets.victimAssets = new Array();
+gameAssets.victimAssets[0] = { URL:'assets/drawings/sheep.png', name:'sheep', scale:{x : 0.07, y : 0.07} };
+gameAssets.victimAssets[1] = { URL:'assets/drawings/dead_sheep.png', name:'sheep_dead', scale:{x : 0.07, y : 0.07} };
 
 function Victim(hit) {
   this.hit = hit;
 
   this.init = function (blockCollisionGroup) {
-    this.sprite = game.add.sprite(300, 7000);
+    this.sprite = game.add.sprite(300, 7000, gameAssets.victimAssets[0].name);
+    this.sprite.scale.x = gameAssets.victimAssets[0].scale.x;
+    this.sprite.scale.y = gameAssets.victimAssets[0].scale.y;
     game.physics.p2.enable(this.sprite, false);
     this.sprite.body.setCircle(16);
-    this.sprite.body.debug = true;
+    //this.sprite.body.debug = true;
     this.sprite.body.mass = 10;
     this.sprite.body.setCollisionGroup(blockCollisionGroup);
     this.sprite.body.collides([blockCollisionGroup]);
@@ -26,14 +30,13 @@ function Victim(hit) {
   };
 
   this.left = function() {
-    this.sprite.body.angularVelocity = -10;
   };
 
   this.right = function() {
-    this.sprite.body.angularVelocity = 10;
   };
 
   this.update = function() {
+    this.sprite.body.angularVelocity = 1;
     if(this.sprite.sprite_collides) {
       this.sprite.body.velocity.y -= 50;
     }
