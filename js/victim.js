@@ -11,6 +11,9 @@ gameSheets.victimAssets[2] = { URL:'assets/drawings/cat_animation.png', name:'ca
 gameSheets.victimAssets[3] = { URL:'assets/drawings/businessman_animation.png', name:'businessman', scale:{x : 0.1, y : 0.1}, };
 gameSheets.victimAssets[4] = { URL:'assets/drawings/teenager_animation.png', name:'teenager', scale:{x : 0.1, y : 0.1} };
 gameSheets.victimAssets[5] = { URL:'assets/drawings/old_man_animation.png', name:'old_man', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[6] = { URL:'assets/drawings/red_gate.png', name:'red', scale:{x : 0.1, y : 0.1}, };
+gameSheets.victimAssets[7] = { URL:'assets/drawings/green_gate.png', name:'green', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[8] = { URL:'assets/drawings/blue_gate.png', name:'blue', scale:{x : 0.1, y : 0.1} };
 
 function Victim(hit) {
   this.hit = hit;
@@ -18,6 +21,7 @@ function Victim(hit) {
   this.hitVictim = null;
   this.animals = [ "sheep", "bunny", "cat"];
   this.people = [ "businessman", "teenager", "old_man"];
+  this.gates = [ "red", "green", "blue"];
   this.sets = [this.animals, this.people];
   this.sprites;
   this.spriteCount = 0;
@@ -102,8 +106,9 @@ function Victim(hit) {
     // Invoke the callback called hit() on the object called this.hit
     this.father.hit.hit(this.father.hit);
 
-    if(Math.random()>0.5) this.father.spawnThing(this.father.animals);
-    else this.father.spawnThing(this.father.people);
+    if(Math.random()>0.66) this.father.spawnThing(this.father.animals);
+    if(Math.random()>0.66) this.father.spawnThing(this.father.people);
+    else this.father.spawnThing(this.father.gates);
   };
 
   this.on_sprite_end_contact = function(body_a, body_b, c, d, e) {

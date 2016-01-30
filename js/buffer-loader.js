@@ -1,3 +1,8 @@
+"use strict";
+/*
+ * Buffer Loader
+ */
+
 function BufferLoader(context, urlList, callback) {
     this.context = context;
     this.urlList = urlList;

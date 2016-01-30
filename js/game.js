@@ -24,20 +24,20 @@ var gameState = function(game){
 
 gameState.prototype = {
 preload: function () {
-          for(var obj in gameAssets)
-          {
-            for(var ast = 0; ast < gameAssets[obj].length; ast++)
-            {
-              game.load.image(gameAssets[obj][ast].name, gameAssets[obj][ast].URL);
-            }
-          }
-          for(var obj in gameSheets)
-          {
-            for(var ast = 0; ast < gameSheets[obj].length; ast++)
-            {
-              game.load.spritesheet(gameSheets[obj][ast].name, gameSheets[obj][ast].URL, 500, 500);
-            }
-          }
+           for(var obj in gameAssets)
+           {
+             for(var ast = 0; ast < gameAssets[obj].length; ast++)
+             {
+               game.load.image(gameAssets[obj][ast].name, gameAssets[obj][ast].URL);
+             }
+           }
+           for(var obj in gameSheets)
+           {
+             for(var ast = 0; ast < gameSheets[obj].length; ast++)
+             {
+               game.load.spritesheet(gameSheets[obj][ast].name, gameSheets[obj][ast].URL, 500, 500);
+             }
+           }
          },
 
 create: function () {
@@ -66,6 +66,25 @@ create: function () {
 
           this.score = 0;
           this.sequence = new Sequence();
+
+    this.audioInterface = new AudioInterface(  'assets/audio/intro_pre.ogg',
+                                         ['assets/audio/part1_pre.ogg',
+                                          'assets/audio/part2_pre.ogg',
+                                          'assets/audio/part3_pre.ogg',
+                                          'assets/audio/intense_pre.ogg'],
+                                        [['assets/audio/stest1.ogg',
+                                          'assets/audio/stest2.ogg',
+                                          'assets/audio/stest3.ogg'],
+                                         ['assets/audio/correct1.ogg',
+                                          'assets/audio/correct2.ogg',
+                                          'assets/audio/correct3.ogg']]);
+/*
+   var start = new Date().getTime();
+   var end = start;
+   while(end < start + 5000) {
+     end = new Date().getTime();
+  }
+*/
         },
 
 update: function () {
@@ -101,8 +120,8 @@ render: function() {
         },
 
 hit: function() {
-      this.score = this.score+=1;
-    },
+       this.score = this.score+=1;
+     },
 
 };
 
