@@ -24,20 +24,20 @@ var gameState = function(game){
 
 gameState.prototype = {
 preload: function () {
-          for(var obj in gameAssets)
-          {
-            for(var ast = 0; ast < gameAssets[obj].length; ast++)
-            {
-              game.load.image(gameAssets[obj][ast].name, gameAssets[obj][ast].URL);
-            }
-          }
-          for(var obj in gameSheets)
-          {
-            for(var ast = 0; ast < gameSheets[obj].length; ast++)
-            {
-              game.load.spritesheet(gameSheets[obj][ast].name, gameSheets[obj][ast].URL, 500, 500);
-            }
-          }
+           for(var obj in gameAssets)
+           {
+             for(var ast = 0; ast < gameAssets[obj].length; ast++)
+             {
+               game.load.image(gameAssets[obj][ast].name, gameAssets[obj][ast].URL);
+             }
+           }
+           for(var obj in gameSheets)
+           {
+             for(var ast = 0; ast < gameSheets[obj].length; ast++)
+             {
+               game.load.spritesheet(gameSheets[obj][ast].name, gameSheets[obj][ast].URL, 500, 500);
+             }
+           }
          },
 
 create: function () {
@@ -101,8 +101,8 @@ render: function() {
         },
 
 hit: function() {
-      this.score = this.score+=1;
-    },
+       this.score = this.score+=1;
+     },
 
 };
 

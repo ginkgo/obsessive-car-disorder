@@ -4,18 +4,18 @@
  */
 
 function randint(i) {
-    return Math.floor((i + 1) * Math.random());
+  return Math.floor((i + 1) * Math.random());
 }
 
 function getRandomSubarray(arr, size) {
-    var shuffled = arr.slice(0), i = arr.length, temp, index;
-    while (i--) {
-        index = randint(i);
-        temp = shuffled[index];
-        shuffled[index] = shuffled[i];
-        shuffled[i] = temp;
-    }
-    return shuffled.slice(0, size);
+  var shuffled = arr.slice(0), i = arr.length, temp, index;
+  while (i--) {
+    index = randint(i);
+    temp = shuffled[index];
+    shuffled[index] = shuffled[i];
+    shuffled[i] = temp;
+  }
+  return shuffled.slice(0, size);
 }
 
 function Choice (previous_choices) {
@@ -40,15 +40,15 @@ function Choice (previous_choices) {
 
 function Sequence () {
   this.pickColor = function(color) {
-      this.currChoice().choose(color);
+    this.currChoice().choose(color);
 
-      this.index++;
-      if (this.index >= this.choices.length) {
-        this.index = 0;
-        if (randint(5)==0) {
-          this.newChoice();
-        }
+    this.index++;
+    if (this.index >= this.choices.length) {
+      this.index = 0;
+      if (randint(5)==0) {
+        this.newChoice();
       }
+    }
   };
 
   this.currChoice = function() {
