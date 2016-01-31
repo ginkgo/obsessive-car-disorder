@@ -91,17 +91,17 @@ create: function () {
           this.score = 0;
           this.sequence = new Sequence();
 
-          this.audioInterface = new AudioInterface(  'assets/audio/intro_pre.ogg',
-              ['assets/audio/part1_pre.ogg',
-              'assets/audio/part2_pre.ogg',
-              'assets/audio/part3_pre.ogg',
-              'assets/audio/intense_pre.ogg'],
-              [['assets/audio/stest1.ogg',
-              'assets/audio/stest2.ogg',
-              'assets/audio/stest3.ogg'],
-              ['assets/audio/correct1.ogg',
+          this.audioInterface = new AudioInterface(  'assets/audio/intro.ogg',
+              ['assets/audio/part1.ogg',
+              'assets/audio/part2.ogg',
+              'assets/audio/part3.ogg',
+              'assets/audio/intense.ogg'],
+              [['assets/audio/correct1.ogg',
               'assets/audio/correct2.ogg',
-              'assets/audio/correct3.ogg']]);
+               'assets/audio/correct3.ogg'],
+              ['assets/audio/copy_correct1.ogg',
+              'assets/audio/copy_correct2.ogg',
+              'assets/audio/copy_correct3.ogg']]);
         },
 
 update: function () {
@@ -164,8 +164,8 @@ hit: function(score) {
          this.score += score;
          if(this.score<0) this.score = 0;
 
-         if(score>0) this.audioInterface.playSound(0, 0);
-         if(score<0 && this.lives>0)
+         if(score>=0) this.audioInterface.playSound(0);
+         else if(score<0 && this.lives>0)
          {
            var audioConfigs = [[1,0,0,0],
                [0,1,0,0],
@@ -174,7 +174,7 @@ hit: function(score) {
            var switchTime = 1.0;
            this.lives--;
            this.hearts[this.lives].alpha = 0;
-           this.audioInterface.playSound(1, 1);
+           this.audioInterface.playSound(1);
            this.audioInterface.switchConfig(audioConfigs[0],switchTime)
          }
          if(this.lives == 0) {

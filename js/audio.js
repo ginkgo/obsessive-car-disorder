@@ -128,11 +128,11 @@ function AudioInterface(intro, tracks, soundBanks) {
     this.soundsInitialized = true;
   }
 
-  this.playSound = function(bank, idx)
+  this.playSound = function(bank)
   {
     if(this.soundsInitialized == true)
     {
-      var sound = this.sounds[idx];
+      var sound = this.sounds[randomElement(this.bankIndex[bank])];
       var sourceNode = this.context.createBufferSource();
       sourceNode.buffer = sound;
       sourceNode.connect(this.soundGainNode);
@@ -150,3 +150,7 @@ function AudioInterface(intro, tracks, soundBanks) {
   }
 }
 
+
+function randomElement(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
