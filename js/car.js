@@ -56,6 +56,7 @@ function Car(gameProperties) {
 
     this.neutral = function() {
         this.carSprite.bringToTop();
+        this.explosion.bringToTop();
     this.carSprite.body.angularVelocity = 0;
     this.carSprite.body.thrust(this.acceleration*0.001);
     this.carSprite.body.moveBackward(-500);
