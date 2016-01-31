@@ -5,7 +5,7 @@
 
 var gameProperties = { screenWidth: 800, screenHeight: 600, gameWidth: 800, gameHeight: 80000, };
 
-var fontAssets = { counterFontStyle:{font: '40px Arial', fill: '#FF00FF', align: 'center'},
+var fontAssets = { counterFontStyle:{font: '30px Arial', fill: '#FF00FF', align: 'center'},
   gameOverFontStyle:{font: '60px Arial', fill: '#FF0000', align: 'center'}, };
 
 var gameAssets = new Object();
@@ -75,7 +75,6 @@ create: function () {
 
     this.hiscoreText = game.add.text(660, 10, "", fontAssets.counterFontStyle);
     this.hiscoreText.fixedToCamera = true;
-    this.hiscoreText.text = "hiscore\n3"
 
           this.gameOverText = game.add.sprite(
               gameProperties.screenWidth/2, 
@@ -205,6 +204,7 @@ render: function() {
             if(this.lives == 0) {
                 this.car.setInMotion(false);
                 this.gameOverText.alpha = 1;
+                this.gameOverText.bringToTop();
                 this.gameOverDelay = new Date().getTime();
                 this.audioInterface.playSound(2);  
             }
