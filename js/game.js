@@ -43,6 +43,8 @@ preload: function () {
                game.load.spritesheet(gameSheets[obj][ast].name, gameSheets[obj][ast].URL, 500, 500);
              }
            }
+
+           game.load.spritesheet("explosion", "assets/drawings/explosion_animation.png", 300, 300);
          },
 
 create: function () {
@@ -237,8 +239,6 @@ render: function() {
                     this.audioInterface.switchConfig([1,0,0,0], switchTime);
                 }
             }
-                
-                
         }
     }
 
