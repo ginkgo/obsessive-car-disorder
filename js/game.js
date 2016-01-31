@@ -21,6 +21,7 @@ var gameState = function(game){
   this.key_space;
   this.car;
   this.score;
+  this.hiscore;
   this.sequence;
   this.lives;
 };
@@ -71,6 +72,10 @@ create: function () {
           this.scoreText = game.add.text(20, 10, "", fontAssets.counterFontStyle);
           this.scoreText.fixedToCamera = true;
 
+    this.hiscoreText = game.add.text(660, 10, "", fontAssets.counterFontStyle);
+    this.hiscoreText.fixedToCamera = true;
+    this.hiscoreText.text = "hiscore\n3"
+
           this.gameOverText = game.add.text(
               gameProperties.screenWidth/2, 
               gameProperties.screenHeight/2, 
@@ -88,7 +93,8 @@ create: function () {
           this.key_thrust = game.input.keyboard.addKey(Phaser.Keyboard.UP);
           this.key_space = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
-          this.score = 0;
+    this.score = 0;
+    this.hiscore = 0;
           this.sequence = new Sequence();
 
           this.audioInterface = new AudioInterface(  'assets/audio/intro.ogg',
@@ -153,6 +159,7 @@ update: function () {
             }
 
             this.scoreText.text = "" + this.score;
+            this.hiscoreText.text = "HISCORE\n" + this.hiscore;
 
             this.car.neutral();
             if (this.key_left.isDown) {
@@ -208,6 +215,8 @@ render: function() {
                 }
             }
 
+            if (this.score > this.hiscore) { this.hiscore = this.score; }
+            
             if (this.audioInterface.isIntroOver()) {
                 var switchTime = 0.25;
                 if (this.lives <= 1) {
