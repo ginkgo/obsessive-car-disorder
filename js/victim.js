@@ -48,6 +48,13 @@ function Victim(hit) {
     this.people.splice(Math.floor((this.people.length) * Math.random()), 1);
     this.gates.splice(Math.floor((this.gates.length) * Math.random()), 1);
 
+    for(var v = 0; v < this.spriteCount; v++)
+    {
+        this.sprites[v].alpha = 0;
+        game.world.remove(this.sprites[v]);
+        this.sprites[v].destroy();
+    }
+
     this.lastSpawn = gameProperties.gameHeight - 500;
 
     this.spawnThing(this.animals);
@@ -71,7 +78,7 @@ function Victim(hit) {
     for(var t = 0; t<namesLen; t++)
     {
       var i = this.spriteCount++;
-      if(this.spriteCount>64) this.spriteCount = 0;
+      if(this.spriteCount>128) this.spriteCount = 0;
       if(this.sprites[i] != undefined)
       {
         game.world.remove(this.sprites[i]);

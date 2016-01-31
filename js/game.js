@@ -100,7 +100,27 @@ create: function () {
               'assets/audio/correct2.ogg',
                'assets/audio/correct3.ogg'],
               ['assets/audio/wrong.ogg']]);
+          this.gameOverDelay = null;
+          this.winningDelay = null;
         },
+
+reset: function() {
+         this.gameOverDelay = null;
+         this.winningDelay = null;
+         this.car.reset();
+         this.track.reset();
+         this.victims.reset();
+         this.score = 0;
+         this.lives = 5;
+
+         for (var i = 0; i<this.lives; i++)
+         {
+           this.hearts[i].alpha = 1;
+         }
+
+         this.gameOverText.alpha = 0;
+         this.car.setInMotion(true);
+       },
 
 update: function () {
           if(this.audioInterface.soundsInitialized==false ||
@@ -113,24 +133,20 @@ update: function () {
             var delay = 5000; /* 5 secs */
             if(new Date().getTime() > this.gameOverDelay + delay)
             {
-              this.gameOverDelay = null;
-              this.car.reset();
-              this.track.reset();
-              this.victims.reset();
-              this.score = 0;
-              this.lives = 5;
-
-              for (var i = 0; i<this.lives; i++)
-              {
-                this.hearts[i].alpha = 1;
-              }
-
-              this.gameOverText.alpha = 0;
-              this.car.setInMotion(true);
+              this.reset();
             }
           }
           else
           { /* We are playing */
+            if( this.winningDelay != null)
+            { /* We won the game: let's wait a moment before increase the difficulty */
+              var delay = 5000; /* 5 secs */
+              if(new Date().getTime() > this.winningDelay + delay)
+              {
+                this.reset();
+              }
+            }
+
             this.scoreText.text = "" + this.score;
 
             this.car.neutral();
@@ -159,11 +175,14 @@ render: function() {
 hit: function(score) {
        if(this.lives>0)
        {
-         this.score += score;
          if(this.score<0) this.score = 0;
 
-         if(score>=0) this.audioInterface.playSound(0);
-         else if(score<0 && this.lives>0)
+         if(score>0)
+         {
+           this.audioInterface.playSound(0);
+           this.score += 2;
+         }
+         if(score<0 && this.lives>0)
          {
            var audioConfigs = [[1,0,0,0],
                [0,1,0,0],
@@ -179,6 +198,14 @@ hit: function(score) {
            this.car.setInMotion(false);
            this.gameOverText.alpha = 1;
            this.gameOverDelay = new Date().getTime();
+         }
+         if(this.score > 100) {
+           if( this.winningDelay == null)
+           {
+             /* Win the game and increase the level. */
+             this.track.showFinishingAt(this.car.carSprite.body.y - 1200);
+             this.winningDelay = new Date().getTime();
+           }
          }
        }
      },

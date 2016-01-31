@@ -23,7 +23,9 @@ function Track(gameProperties) {
     this.reset();
   };
 
-  this.showFinishingAt = function(x, y) {
+  this.showFinishingAt = function(y) {
+    this.finishSprite.y = y;
+    this.finishSprite.alpha = 1;
   }
 
   this.reset = function() {
