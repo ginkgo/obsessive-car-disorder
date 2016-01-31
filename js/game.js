@@ -103,6 +103,8 @@ create: function () {
               ['assets/audio/boom.ogg']]);
           this.gameOverDelay = null;
           this.winningDelay = null;
+
+          this.level = 0;
         },
 
 reset: function() {
@@ -110,7 +112,7 @@ reset: function() {
          this.winningDelay = null;
          this.car.reset();
          this.track.reset();
-         this.victims.reset();
+         this.victims.reset(this.level);
          this.score = 0;
          this.lives = 5;
 
@@ -134,6 +136,7 @@ update: function () {
             var delay = 5000; /* 5 secs */
             if(new Date().getTime() > this.gameOverDelay + delay)
             {
+              this.level = 0;
               this.reset();
             }
           }
@@ -144,6 +147,7 @@ update: function () {
               var delay = 5000; /* 5 secs */
               if(new Date().getTime() > this.winningDelay + delay)
               {
+                this.level++;
                 this.reset();
               }
             }

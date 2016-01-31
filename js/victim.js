@@ -13,10 +13,10 @@ gameSheets.victimAssets[ 4] = { URL:'assets/drawings/businessman_animation.png',
 gameSheets.victimAssets[ 5] = { URL:'assets/drawings/teenager_animation.png', name:'teenager', scale:{x : 0.1, y : 0.1} };
 gameSheets.victimAssets[ 6] = { URL:'assets/drawings/old_man_animation.png', name:'old_man', scale:{x : 0.1, y : 0.1} };
 gameSheets.victimAssets[ 7] = { URL:'assets/drawings/old_woman_animation.png', name:'old_woman', scale:{x : 0.1, y : 0.1} };
-gameSheets.victimAssets[ 8] = { URL:'assets/drawings/red_gate.png', name:'red', scale:{x : 0.1, y : 0.1}, };
-gameSheets.victimAssets[ 9] = { URL:'assets/drawings/green_gate.png', name:'green', scale:{x : 0.1, y : 0.1} };
-gameSheets.victimAssets[10] = { URL:'assets/drawings/blue_gate.png', name:'blue', scale:{x : 0.1, y : 0.1} };
-gameSheets.victimAssets[11] = { URL:'assets/drawings/yellow_gate.png', name:'yellow', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[ 8] = { URL:'assets/drawings/red_gate_animation.png', name:'red', scale:{x : 0.1, y : 0.1}, };
+gameSheets.victimAssets[ 9] = { URL:'assets/drawings/green_gate_animation.png', name:'green', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[10] = { URL:'assets/drawings/blue_gate_animation.png', name:'blue', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[11] = { URL:'assets/drawings/yellow_gate_animation.png', name:'yellow', scale:{x : 0.1, y : 0.1} };
 
 function Victim(hit) {
   this.hit = hit;
@@ -28,14 +28,15 @@ function Victim(hit) {
   this.spriteCount = 0;
   this.blockCollisionGroup;
   this.lastSpawn;
+  this.difficultyFactor = 500.0;
 
   this.init = function (blockCollisionGroup) {
     this.sprites = new Array();
     this.blockCollisionGroup = blockCollisionGroup;
-    this.reset();
+    this.reset(0);
   };
 
-  this.reset = function ()
+  this.reset = function (level)
   {
     this.chosen = ["", "", ""];
 
@@ -58,6 +59,8 @@ function Victim(hit) {
     this.lastSpawn = gameProperties.gameHeight - 500;
 
     this.spawnThing(this.animals);
+
+    this.difficultyFactor = 500.0 - level * 50.0;
   }
 
   this.spawnThing = function(names) {
@@ -104,7 +107,7 @@ function Victim(hit) {
       //this.sprites[i].body.angularVelocity = Math.random() * 3;
       //this.sprites[i].body.thrust(Math.random() * 50000);
     }
-    this.lastSpawn-=500;
+    this.lastSpawn-=this.difficultyFactor;
   }
 
   this.neutral = function() {
