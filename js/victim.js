@@ -28,7 +28,8 @@ function Victim(hit) {
   this.spriteCount = 0;
   this.blockCollisionGroup;
   this.lastSpawn;
-  this.difficultyFactor = 500.0;
+  this.easierDifficulty = 600.0;
+  this.difficultyFactor = this.easierDifficulty;
 
   this.init = function (blockCollisionGroup) {
     this.sprites = new Array();
@@ -56,11 +57,11 @@ function Victim(hit) {
         this.sprites[v].destroy();
     }
 
-    this.lastSpawn = gameProperties.gameHeight - 500;
+    this.lastSpawn = gameProperties.gameHeight - this.easierDifficulty;
 
     this.spawnThing(this.animals);
 
-    this.difficultyFactor = 500.0 - level * 50.0;
+    this.difficultyFactor = this.easierDifficulty - level * 50.0;
   }
 
   this.spawnThing = function(names) {
