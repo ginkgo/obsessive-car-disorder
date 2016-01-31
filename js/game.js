@@ -5,12 +5,14 @@
 
 var gameProperties = { screenWidth: 800, screenHeight: 600, gameWidth: 800, gameHeight: 80000, };
 
-var fontAssets = {
-counterFontStyle:{font: '20px Arial', fill: '#FFFFFF', align: 'center'},
-};
+var fontAssets = { counterFontStyle:{font: '40px Arial', fill: '#FF00FF', align: 'center'},
+  gameOverFontStyle:{font: '60px Arial', fill: '#FF0000', align: 'center'}, };
 
 var gameAssets = new Object();
 var gameSheets = new Object();
+
+gameAssets.heartAssets = new Array();
+gameAssets.heartAssets[0] = { URL:'assets/drawings/heart.png', name:'heart' };
 
 var gameState = function(game){
   this.key_left;
@@ -20,6 +22,7 @@ var gameState = function(game){
   this.car;
   this.score;
   this.sequence;
+  this.lives;
 };
 
 gameState.prototype = {
@@ -41,6 +44,9 @@ preload: function () {
          },
 
 create: function () {
+          this.hearts = new Array();
+          this.lives = 5;
+
           game.world.setBounds(0, 0, gameProperties.gameWidth, gameProperties.gameHeight);
           game.physics.startSystem(Phaser.Physics.P2JS);
           game.physics.p2.gravity.y = 0;
@@ -50,14 +56,32 @@ create: function () {
           this.track = new Track(gameProperties);
           this.track.init();
 
+          for (var i = 0; i<this.lives; i++)
+          {
+            this.hearts[i] = game.add.sprite( 25*(i+1), 100 , gameAssets.heartAssets[0].name);
+            this.hearts[i].fixedToCamera = true;
+            this.hearts[i].anchor.set(0.5, 0.5); 
+            this.hearts[i].scale.x = this.hearts[i].scale.y = 0.1;
+          }
+
           this.car = new Car(gameProperties);
           this.car.init(blockCollisionGroup);
+          this.car.setInMotion(true);
 
-          this.myText = game.add.text(20, 10, "hello!!", fontAssets.counterFontStyle);
-          this.myText.fixedToCamera = true;
+          this.scoreText = game.add.text(20, 10, "", fontAssets.counterFontStyle);
+          this.scoreText.fixedToCamera = true;
 
-          this.ball = new Victim(this);
-          this.ball.init(blockCollisionGroup);
+          this.gameOverText = game.add.text(
+              gameProperties.screenWidth/2, 
+              gameProperties.screenHeight/2, 
+              "Game Over!", 
+              fontAssets.gameOverFontStyle);
+          this.gameOverText.fixedToCamera = true;
+          this.gameOverText.anchor.set(0.5, 0.5); 
+          this.gameOverText.alpha = 0;
+
+          this.victims = new Victim(this);
+          this.victims.init(blockCollisionGroup);
 
           this.key_left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
           this.key_right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -78,35 +102,52 @@ create: function () {
               ['assets/audio/correct1.ogg',
               'assets/audio/correct2.ogg',
               'assets/audio/correct3.ogg']]);
-          /*
-             var start = new Date().getTime();
-             var end = start;
-             while(end < start + 5000) {
-             end = new Date().getTime();
-             }
-           */
         },
 
 update: function () {
-          this.myText.text = "Score: " + this.score;
-
-          this.car.neutral();
-          if (this.key_left.isDown) {
-            this.car.left();
-            this.ball.left();
-          } else if (this.key_right.isDown) {
-            this.car.right();
-            this.ball.right();
+          if(this.audioInterface.soundsInitialized==false ||
+              this.audioInterface.tracksInitialized==false)
+          { /* We are waiting for audio to load */
+            this.scoreText.text = "Loading...";
           }
+          else if( this.gameOverDelay != null)
+          { /* We are in game over mode and should sleep a moment */
+            var delay = 5000; /* 5 secs */
+            if(new Date().getTime() > this.gameOverDelay + delay)
+            {
+              this.gameOverDelay = null;
+              this.car.reset();
+              this.track.reset();
+              this.victims.reset();
+              this.score = 0;
+              this.lives = 5;
 
-          if (this.key_thrust.isDown) {
-            this.car.accelerate();
-            this.myText.text = "Go!";
+              for (var i = 0; i<this.lives; i++)
+              {
+                this.hearts[i].alpha = 1;
+              }
+
+              this.gameOverText.alpha = 0;
+              this.car.setInMotion(true);
+            }
           }
+          else
+          { /* We are playing */
+            this.scoreText.text = "" + this.score;
 
-          if (this.key_space.isDown) {
-            this.myText.text = "Fire!!!";
-            this.ball.update();
+            this.car.neutral();
+            if (this.key_left.isDown) {
+              this.car.left();
+            } else if (this.key_right.isDown) {
+              this.car.right();
+            }
+
+            if (this.key_thrust.isDown) {
+            }
+
+            if (this.key_space.isDown) {
+              this.victims.update();
+            }
           }
         },
 
@@ -115,22 +156,33 @@ render: function() {
           //game.debug.text(game.time.physicsElapsed, 32, 32);
           //game.debug.body(this.car.shipSprite);
           //game.debug.bodyInfo(this.car.shipSprite, 16, 24);
-
-          game.debug.body(this.ball);
         },
 
 hit: function(score) {
-       this.score += score;
+       if(this.lives>0)
+       {
+         this.score += score;
+         if(this.score<0) this.score = 0;
 
-       if(score>0) this.audioInterface.playSound(0, 0);
-       if(score<0) this.audioInterface.playSound(1, 1);
-/*
-TODO: update the music depending on how the player is doing
-<button type="button" onclick="audioInterface.switchConfig(audioConfigs[0],switchTime)">C1</button>
-<button type="button" onclick="audioInterface.switchConfig(audioConfigs[1],switchTime)">C2</button>
-<button type="button" onclick="audioInterface.switchConfig(audioConfigs[2],switchTime)">C3</button>
-<button type="button" onclick="audioInterface.switchConfig(audioConfigs[3],switchTime)">C4</button>
-*/
+         if(score>0) this.audioInterface.playSound(0, 0);
+         if(score<0 && this.lives>0)
+         {
+           var audioConfigs = [[1,0,0,0],
+               [0,1,0,0],
+               [0,0,1,0],
+               [0,0,0,1]];
+           var switchTime = 1.0;
+           this.lives--;
+           this.hearts[this.lives].alpha = 0;
+           this.audioInterface.playSound(1, 1);
+           this.audioInterface.switchConfig(audioConfigs[0],switchTime)
+         }
+         if(this.lives == 0) {
+           this.car.setInMotion(false);
+           this.gameOverText.alpha = 1;
+           this.gameOverDelay = new Date().getTime();
+         }
+       }
      },
 
 };

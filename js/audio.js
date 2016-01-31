@@ -38,16 +38,16 @@ function AudioInterface(intro, tracks, soundBanks) {
       return;
     }
 
-    var trackList = tracks.concat([intro])
-      this.bankIndex = []
-      var soundList = []
-      var i = 0;
+    var trackList = tracks.concat([intro]);
+    this.bankIndex = [];
+    var soundList = [];
+    var i = 0;
     for (var bank of soundBanks) {
-      var index = []
-        for (var sound of bank) {
-          index.push(i++);
-          soundList.push(sound);
-        }
+      var index = [];
+      for (var sound of bank) {
+        index.push(i++);
+        soundList.push(sound);
+      }
       this.bankIndex.push(index);
     }
 
@@ -84,15 +84,15 @@ function AudioInterface(intro, tracks, soundBanks) {
   }
 
   this.switchConfig = function(audioConfig, duration) {
-    var startTime = this.context.currentTime
+    var startTime = this.context.currentTime;
 
-      for (var i = 0; i < this.gains.length; ++i) {
-        var start = this.gains[i].gain.value
-          var end = audioConfig[i]
+    for (var i = 0; i < this.gains.length; ++i) {
+      var start = this.gains[i].gain.value;
+      var end = audioConfig[i];
 
-          this.gains[i].gain.setValueAtTime(start,startTime);
-        this.gains[i].gain.linearRampToValueAtTime(end, startTime + duration);
-      }
+      this.gains[i].gain.setValueAtTime(start,startTime);
+      this.gains[i].gain.linearRampToValueAtTime(end, startTime + duration);
+    }
   }
 
   this.finishedLoadingTracks = function(bufferList) {
@@ -101,7 +101,6 @@ function AudioInterface(intro, tracks, soundBanks) {
     this.introTrack.buffer = bufferList[bufferList.length-1];
 
     for (var i = 0; i < bufferList.length-1; ++i) {
-
       this.tracks.push(this.context.createBufferSource());
       this.gains.push(this.context.createGain());
 
@@ -126,7 +125,6 @@ function AudioInterface(intro, tracks, soundBanks) {
     this.soundGainNode.gain.setValueAtTime(3.0,0.0);
     this.soundGainNode.connect(this.context.destination);
 
-
     this.soundsInitialized = true;
   }
 
@@ -135,7 +133,6 @@ function AudioInterface(intro, tracks, soundBanks) {
     if(this.soundsInitialized == true)
     {
       var sound = this.sounds[idx];
-
       var sourceNode = this.context.createBufferSource();
       sourceNode.buffer = sound;
       sourceNode.connect(this.soundGainNode);
