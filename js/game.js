@@ -11,8 +11,9 @@ var fontAssets = { counterFontStyle:{font: '40px Arial', fill: '#FF00FF', align:
 var gameAssets = new Object();
 var gameSheets = new Object();
 
-gameAssets.heartAssets = new Array();
-gameAssets.heartAssets[0] = { URL:'assets/drawings/heart.png', name:'heart' };
+gameAssets.UIAssets = new Array();
+gameAssets.UIAssets[0] = { URL:'assets/drawings/heart.png', name:'heart' };
+gameAssets.UIAssets[1] = { URL:'assets/drawings/game_over_text.png', name:'game_over' };
 
 var gameState = function(game){
   this.key_left;
@@ -58,7 +59,7 @@ create: function () {
 
           for (var i = 0; i<this.lives; i++)
           {
-            this.hearts[i] = game.add.sprite( 25*(i+1), 100 , gameAssets.heartAssets[0].name);
+            this.hearts[i] = game.add.sprite( 25*(i+1), 100 , gameAssets.UIAssets[0].name);
             this.hearts[i].fixedToCamera = true;
             this.hearts[i].anchor.set(0.5, 0.5); 
             this.hearts[i].scale.x = this.hearts[i].scale.y = 0.1;
@@ -71,14 +72,15 @@ create: function () {
           this.scoreText = game.add.text(20, 10, "", fontAssets.counterFontStyle);
           this.scoreText.fixedToCamera = true;
 
-          this.gameOverText = game.add.text(
+          this.gameOverText = game.add.sprite(
               gameProperties.screenWidth/2, 
               gameProperties.screenHeight/2, 
-              "Game Over!", 
-              fontAssets.gameOverFontStyle);
+              gameAssets.UIAssets[1].name);
           this.gameOverText.fixedToCamera = true;
           this.gameOverText.anchor.set(0.5, 0.5); 
           this.gameOverText.alpha = 0;
+
+
 
           this.victims = new Victim(this);
           this.victims.init(blockCollisionGroup);
