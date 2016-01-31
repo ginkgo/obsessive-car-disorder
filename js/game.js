@@ -66,6 +66,7 @@ create: function () {
 
           this.car = new Car(gameProperties);
           this.car.init(blockCollisionGroup);
+          this.car.setInMotion(true);
 
           this.scoreText = game.add.text(20, 10, "", fontAssets.counterFontStyle);
           this.scoreText.fixedToCamera = true;
@@ -79,8 +80,8 @@ create: function () {
           this.gameOverText.anchor.set(0.5, 0.5); 
           this.gameOverText.alpha = 0;
 
-          this.ball = new Victim(this);
-          this.ball.init(blockCollisionGroup);
+          this.victims = new Victim(this);
+          this.victims.init(blockCollisionGroup);
 
           this.key_left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
           this.key_right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -106,28 +107,46 @@ create: function () {
 update: function () {
           if(this.audioInterface.soundsInitialized==false ||
               this.audioInterface.tracksInitialized==false)
-          {
+          { /* We are waiting for audio to load */
             this.scoreText.text = "Loading...";
           }
+          else if( this.gameOverDelay != null)
+          { /* We are in game over mode and should sleep a moment */
+            var delay = 5000; /* 5 secs */
+            if(new Date().getTime() > this.gameOverDelay + delay)
+            {
+              this.gameOverDelay = null;
+              this.car.reset();
+              this.track.reset();
+              this.victims.reset();
+              this.score = 0;
+              this.lives = 5;
+
+              for (var i = 0; i<this.lives; i++)
+              {
+                this.hearts[i].alpha = 1;
+              }
+
+              this.gameOverText.alpha = 0;
+              this.car.setInMotion(true);
+            }
+          }
           else
-          {
+          { /* We are playing */
             this.scoreText.text = "" + this.score;
 
             this.car.neutral();
             if (this.key_left.isDown) {
               this.car.left();
-              this.ball.left();
             } else if (this.key_right.isDown) {
               this.car.right();
-              this.ball.right();
             }
 
             if (this.key_thrust.isDown) {
-              this.car.accelerate();
             }
 
             if (this.key_space.isDown) {
-              this.ball.update();
+              this.victims.update();
             }
           }
         },
@@ -137,8 +156,6 @@ render: function() {
           //game.debug.text(game.time.physicsElapsed, 32, 32);
           //game.debug.body(this.car.shipSprite);
           //game.debug.bodyInfo(this.car.shipSprite, 16, 24);
-
-          game.debug.body(this.ball);
         },
 
 hit: function(score) {
@@ -160,7 +177,11 @@ hit: function(score) {
            this.audioInterface.playSound(1, 1);
            this.audioInterface.switchConfig(audioConfigs[0],switchTime)
          }
-         if(this.lives == 0) {this.gameOverText.alpha = 1;}
+         if(this.lives == 0) {
+           this.car.setInMotion(false);
+           this.gameOverText.alpha = 1;
+           this.gameOverDelay = new Date().getTime();
+         }
        }
      },
 

@@ -30,6 +30,15 @@ function Victim(hit) {
   this.lastSpawn;
 
   this.init = function (blockCollisionGroup) {
+    this.sprites = new Array();
+    this.blockCollisionGroup = blockCollisionGroup;
+    this.reset();
+  };
+
+  this.reset = function ()
+  {
+    this.chosen = ["", "", ""];
+
     this.animals = [ "sheep", "bunny", "cat", "snake"];
     this.people = [ "businessman", "teenager", "old_man", "old_woman"];
     this.gates = [ "red", "green", "blue", "yellow"];
@@ -39,16 +48,13 @@ function Victim(hit) {
     this.people.splice(Math.floor((this.people.length) * Math.random()), 1);
     this.gates.splice(Math.floor((this.gates.length) * Math.random()), 1);
 
-    this.sprites = new Array();
-    this.blockCollisionGroup = blockCollisionGroup;
-    this.lastSpawn = gameProperties.gameHeight - 300;
+    this.lastSpawn = gameProperties.gameHeight - 500;
 
     this.spawnThing(this.animals);
-  };
+  }
 
   this.spawnThing = function(names) {
     var namesPermutation = new Array();
-
 
     var namesLen = names.length;
     for(var t = 0; t<namesLen; t++)
@@ -65,8 +71,12 @@ function Victim(hit) {
     for(var t = 0; t<namesLen; t++)
     {
       var i = this.spriteCount++;
-      if(this.spriteCount>32) this.spriteCount = 0;
-      if(this.sprites[i] != undefined) delete this.sprites[i];
+      if(this.spriteCount>64) this.spriteCount = 0;
+      if(this.sprites[i] != undefined)
+      {
+        game.world.remove(this.sprites[i]);
+        this.sprites[i].destroy();
+      }
 
       this.sprites[i] = game.add.sprite(270 + t * 130, this.lastSpawn, names[t]);
       this.sprites[i].scale.x = 0.2;
@@ -108,9 +118,9 @@ function Victim(hit) {
     var found = [
       this.father.animals.indexOf(this.victim) > -1,
       this.father.people.indexOf(this.victim) > -1,
-      this.father.gates.indexOf(this.victim) > -1 ]
+      this.father.gates.indexOf(this.victim) > -1 ];
 
-        var score = 0;
+    var score = 0;
 
     for(var i = 0; i<found.length; i++)
     {

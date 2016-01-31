@@ -11,6 +11,7 @@ function Car(gameProperties) {
   this.acceleration = 3;
   this.angularVelocity = 3;
   this.carSprite;
+  this.inMotion;
 
   this.init = function (blockCollisionGroup) {
     this.carSprite = game.add.sprite(
@@ -22,7 +23,6 @@ function Car(gameProperties) {
     this.carSprite.scale.x = 0.25;
     this.carSprite.scale.y = 0.25;
     game.physics.p2.enable(this.carSprite, false);
-    this.carSprite.rotation = 1.0;
     this.carSprite.body.setCollisionGroup(blockCollisionGroup);
     this.carSprite.body.collides([blockCollisionGroup]);
     this.carSprite.body.damping = 1.0;
@@ -34,11 +34,21 @@ function Car(gameProperties) {
     game.camera.follow(this.carSprite, Phaser.Camera.FOLLOW_TOPDOWN);
     game.camera.deadzone = new Phaser.Rectangle(0, gameProperties.screenHeight*0.9, 
         gameProperties.screenWidth, 0);
+
+    this.reset();
+  };
+
+  this.reset = function() {
+    this.inMotion = false;
+    this.carSprite.body.angularVelocity = 0;
+    this.carSprite.body.rotation = 0;
+    this.carSprite.body.x = this.gameProperties.gameWidth * 0.5
+    this.carSprite.body.y = this.gameProperties.gameHeight - 200 ;
   };
 
   this.neutral = function() {
     this.carSprite.body.angularVelocity = 0;
-    this.carSprite.body.thrust(this.acceleration);
+    if(this.inMotion) { this.carSprite.body.thrust(this.acceleration) };
     var maxRot = 0.5;
     if(this.carSprite.body.rotation>maxRot) this.carSprite.body.rotation = maxRot;
     if(this.carSprite.body.rotation<-maxRot) this.carSprite.body.rotation = -maxRot;
@@ -58,9 +68,8 @@ function Car(gameProperties) {
     this.carSprite.body.angularVelocity = this.angularVelocity;
   };
 
-  this.accelerate = function() {
-    //this.carSprite.body.thrust(this.acceleration);
-    //debugger
+  this.setInMotion = function(inMotion) {
+    this.inMotion = inMotion;
   };
 
 };
