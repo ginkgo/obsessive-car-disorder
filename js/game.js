@@ -49,7 +49,8 @@ preload: function () {
 
 create: function () {
           this.hearts = new Array();
-          this.lives = 5;
+    this.lives = 5;
+    this.finishTarget=20;
 
           game.world.setBounds(0, 0, gameProperties.gameWidth, gameProperties.gameHeight);
           game.physics.startSystem(Phaser.Physics.P2JS);
@@ -123,7 +124,8 @@ reset: function() {
          this.track.reset();
          this.victims.reset(this.level);
          this.score = 0;
-         this.lives = 5;
+    this.lives = 5;
+    this.finishTarget = 20;
 
          for (var i = 0; i<this.lives; i++)
          {
@@ -158,9 +160,13 @@ update: function () {
               if(new Date().getTime() > this.winningDelay + delay)
               {
                   this.level++;
-                  var lives = this.lives;
+                  //var lives = this.lives;
+                  var score = this.score;
+                  var finishTarget = this.finishTarget + 20;
                   this.reset();
-                  this.lives = lives+1;
+                  //this.lives = lives+1;
+                  this.score = score;
+                  this.finishTarget = finishTarget;
               }
             }
 
@@ -214,7 +220,7 @@ render: function() {
                 this.gameOverDelay = new Date().getTime();
                 this.audioInterface.playSound(2);  
             }
-            if(this.score > 20) {
+            if(this.score > this.finishTarget) {
                 if( this.winningDelay == null)
                 {
                     /* Win the game and increase the level. */
