@@ -209,7 +209,7 @@ render: function() {
             }
 
             if (this.audioInterface.isIntroOver()) {
-                var switchTime = 1.0;
+                var switchTime = 0.25;
                 if (this.lives <= 1) {
                     this.audioInterface.switchConfig([0,0,0,1], switchTime);
                 }
