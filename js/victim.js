@@ -5,23 +5,23 @@
  */
 
 gameSheets.victimAssets = new Array();
-gameSheets.victimAssets[0] = { URL:'assets/drawings/sheep_animation.png', name:'sheep', scale:{x : 0.1, y : 0.1}, };
-gameSheets.victimAssets[1] = { URL:'assets/drawings/bunny_animation.png', name:'bunny', scale:{x : 0.1, y : 0.1} };
-gameSheets.victimAssets[2] = { URL:'assets/drawings/cat_animation.png', name:'cat', scale:{x : 0.1, y : 0.1} };
-gameSheets.victimAssets[3] = { URL:'assets/drawings/businessman_animation.png', name:'businessman', scale:{x : 0.1, y : 0.1}, };
-gameSheets.victimAssets[4] = { URL:'assets/drawings/teenager_animation.png', name:'teenager', scale:{x : 0.1, y : 0.1} };
-gameSheets.victimAssets[5] = { URL:'assets/drawings/old_man_animation.png', name:'old_man', scale:{x : 0.1, y : 0.1} };
-gameSheets.victimAssets[6] = { URL:'assets/drawings/red_gate.png', name:'red', scale:{x : 0.1, y : 0.1}, };
-gameSheets.victimAssets[7] = { URL:'assets/drawings/green_gate.png', name:'green', scale:{x : 0.1, y : 0.1} };
-gameSheets.victimAssets[8] = { URL:'assets/drawings/blue_gate.png', name:'blue', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[ 0] = { URL:'assets/drawings/sheep_animation.png', name:'sheep', scale:{x : 0.1, y : 0.1}, };
+gameSheets.victimAssets[ 1] = { URL:'assets/drawings/bunny_animation.png', name:'bunny', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[ 2] = { URL:'assets/drawings/cat_animation.png', name:'cat', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[ 3] = { URL:'assets/drawings/snake_animation.png', name:'snake', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[ 4] = { URL:'assets/drawings/businessman_animation.png', name:'businessman', scale:{x : 0.1, y : 0.1}, };
+gameSheets.victimAssets[ 5] = { URL:'assets/drawings/teenager_animation.png', name:'teenager', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[ 6] = { URL:'assets/drawings/old_man_animation.png', name:'old_man', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[ 7] = { URL:'assets/drawings/old_woman_animation.png', name:'old_woman', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[ 8] = { URL:'assets/drawings/red_gate.png', name:'red', scale:{x : 0.1, y : 0.1}, };
+gameSheets.victimAssets[ 9] = { URL:'assets/drawings/green_gate.png', name:'green', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[10] = { URL:'assets/drawings/blue_gate.png', name:'blue', scale:{x : 0.1, y : 0.1} };
+gameSheets.victimAssets[11] = { URL:'assets/drawings/yellow_gate.png', name:'yellow', scale:{x : 0.1, y : 0.1} };
 
 function Victim(hit) {
   this.hit = hit;
   this.carContact = false;
   this.hitVictim = null;
-  this.animals = [ "sheep", "bunny", "cat"];
-  this.people = [ "businessman", "teenager", "old_man"];
-  this.gates = [ "red", "green", "blue"];
   this.sets = [this.animals, this.people, this.gates];
   this.chosen = ["", "", ""];
   this.sprites;
@@ -30,14 +30,20 @@ function Victim(hit) {
   this.lastSpawn;
 
   this.init = function (blockCollisionGroup) {
+    this.animals = [ "sheep", "bunny", "cat", "snake"];
+    this.people = [ "businessman", "teenager", "old_man", "old_woman"];
+    this.gates = [ "red", "green", "blue", "yellow"];
+
+    // Remove one random element from each of the 3 sets
+    this.animals.splice(Math.floor((this.animals.length) * Math.random()), 1);
+    this.people.splice(Math.floor((this.people.length) * Math.random()), 1);
+    this.gates.splice(Math.floor((this.gates.length) * Math.random()), 1);
+
     this.sprites = new Array();
     this.blockCollisionGroup = blockCollisionGroup;
     this.lastSpawn = gameProperties.gameHeight - 300;
 
     this.spawnThing(this.animals);
-
-    this.myText = game.add.text(20, 40, "hello!!", fontAssets.counterFontStyle);
-    this.myText.fixedToCamera = true;
   };
 
   this.spawnThing = function(names) {
@@ -59,7 +65,10 @@ function Victim(hit) {
     for(var t = 0; t<namesLen; t++)
     {
       var i = this.spriteCount++;
-      this.sprites[i] = game.add.sprite(300 + t * 120, this.lastSpawn, names[t]);
+      if(this.spriteCount>32) this.spriteCount = 0;
+      if(this.sprites[i] != undefined) delete this.sprites[i];
+
+      this.sprites[i] = game.add.sprite(270 + t * 130, this.lastSpawn, names[t]);
       this.sprites[i].scale.x = 0.2;
       this.sprites[i].scale.y = 0.2;
       game.physics.p2.enable(this.sprites[i], false);
@@ -94,8 +103,6 @@ function Victim(hit) {
   };
 
   this.on_sprite_begin_contact = function(body_a, body_b, c, d, e) {
-    this.father.myText.text = "\nkilled: " + this.victim;
-
     this.frame = 1;
 
     var found = [
