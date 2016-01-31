@@ -54,7 +54,9 @@ function Victim(hit) {
     {
         this.sprites[v].alpha = 0;
         game.world.remove(this.sprites[v]);
+        this.sprites[v].kill();
         this.sprites[v].destroy();
+        delete this.sprites[v];
     }
 
     this.lastSpawn = gameProperties.gameHeight - this.easierDifficulty;
@@ -82,13 +84,6 @@ function Victim(hit) {
     for(var t = 0; t<namesLen; t++)
     {
       var i = this.spriteCount++;
-      if(this.spriteCount>128) this.spriteCount = 0;
-      if(this.sprites[i] != undefined)
-      {
-        game.world.remove(this.sprites[i]);
-        this.sprites[i].destroy();
-      }
-
       this.sprites[i] = game.add.sprite(270 + t * 130, this.lastSpawn, names[t]);
       this.sprites[i].scale.x = 0.2;
       this.sprites[i].scale.y = 0.2;
