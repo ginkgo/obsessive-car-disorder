@@ -173,44 +173,56 @@ render: function() {
           //game.debug.bodyInfo(this.car.shipSprite, 16, 24);
         },
 
-hit: function(score) {
-       if(this.lives>0)
-       {
-         if(this.score<0) this.score = 0;
+    hit: function(score) {
+        if(this.lives>0)
+        {
+            if(this.score<0) this.score = 0;
 
-         if(score>0)
-         {
-           this.audioInterface.playSound(0);
-           this.score += 2;
-         }
-         if(score<0 && this.lives>0)
-         {
-           var audioConfigs = [[1,0,0,0],
-               [0,1,0,0],
-               [0,0,1,0],
-               [0,0,0,1]];
-           var switchTime = 1.0;
-           this.lives--;
-           this.hearts[this.lives].alpha = 0;
-           this.audioInterface.playSound(1);
-           this.audioInterface.switchConfig(audioConfigs[0],switchTime)
-         }
-         if(this.lives == 0) {
-           this.car.setInMotion(false);
-           this.gameOverText.alpha = 1;
-           this.gameOverDelay = new Date().getTime();
-           this.audioInterface.playSound(2);  
-         }
-         if(this.score > 100) {
-           if( this.winningDelay == null)
-           {
-             /* Win the game and increase the level. */
-             this.track.showFinishingAt(this.car.carSprite.body.y - 1200);
-             this.winningDelay = new Date().getTime();
-           }
-         }
-       }
-     },
+            if(score>0)
+            {
+                this.audioInterface.playSound(0);
+                this.score += 2;
+            }
+            if(score<0 && this.lives>0)
+            {
+                this.lives--;
+                this.hearts[this.lives].alpha = 0;
+                this.audioInterface.playSound(1);
+            }
+            if(this.lives == 0) {
+                this.car.setInMotion(false);
+                this.gameOverText.alpha = 1;
+                this.gameOverDelay = new Date().getTime();
+                this.audioInterface.playSound(2);  
+            }
+            if(this.score > 100) {
+                if( this.winningDelay == null)
+                {
+                    /* Win the game and increase the level. */
+                    this.track.showFinishingAt(this.car.carSprite.body.y - 1200);
+                    this.winningDelay = new Date().getTime();
+                }
+            }
+
+            if (this.audioInterface.isIntroOver()) {
+                var switchTime = 1.0;
+                if (this.lives <= 1) {
+                    this.audioInterface.switchConfig([0,0,0,1], switchTime);
+                }
+                else if (this.lives <= 2) {
+                    this.audioInterface.switchConfig([0,0,1,0], switchTime);
+                }
+                else if (this.lives <= 3) {
+                    this.audioInterface.switchConfig([0,1,0,0], switchTime);
+                }
+                else {
+                    this.audioInterface.switchConfig([1,0,0,0], switchTime);
+                }
+            }
+                
+                
+        }
+    }
 
 };
 
