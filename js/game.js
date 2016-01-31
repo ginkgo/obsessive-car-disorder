@@ -154,8 +154,10 @@ update: function () {
               var delay = 5000; /* 5 secs */
               if(new Date().getTime() > this.winningDelay + delay)
               {
-                this.level++;
-                this.reset();
+                  this.level++;
+                  var lives = this.lives;
+                  this.reset()0;
+                  this.lives = lives+1;
               }
             }
 
@@ -209,7 +211,7 @@ render: function() {
                 this.gameOverDelay = new Date().getTime();
                 this.audioInterface.playSound(2);  
             }
-            if(this.score > 100) {
+            if(this.score > 20) {
                 if( this.winningDelay == null)
                 {
                     /* Win the game and increase the level. */
