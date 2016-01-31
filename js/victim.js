@@ -52,11 +52,14 @@ function Victim(hit) {
 
     for(var v = 0; v < this.spriteCount; v++)
     {
-        this.sprites[v].alpha = 0;
-        game.world.remove(this.sprites[v]);
-        this.sprites[v].kill();
-        this.sprites[v].destroy();
-        delete this.sprites[v];
+        if(this.sprites[v]!=undefined)
+        {
+          this.sprites[v].alpha = 0;
+          game.world.remove(this.sprites[v]);
+          this.sprites[v].kill();
+          this.sprites[v].destroy();
+          delete this.sprites[v];
+        }
     }
 
     this.lastSpawn = gameProperties.gameHeight - this.easierDifficulty;
