@@ -156,7 +156,7 @@ update: function () {
               {
                   this.level++;
                   var lives = this.lives;
-                  this.reset()0;
+                  this.reset();
                   this.lives = lives+1;
               }
             }
