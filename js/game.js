@@ -168,7 +168,8 @@ update: function () {
             } else if (this.key_right.isDown) {
               this.car.right();
             }
-
+              this.track.finishSpriteTop.bringToTop();
+              
             if (this.key_thrust.isDown) {
             }
 
