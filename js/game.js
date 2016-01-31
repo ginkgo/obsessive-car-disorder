@@ -5,7 +5,7 @@
 
 var gameProperties = { screenWidth: 800, screenHeight: 600, gameWidth: 800, gameHeight: 80000, };
 
-var fontAssets = { counterFontStyle:{font: '30px Arial', fill: '#FF00FF', align: 'center'},
+var fontAssets = { counterFontStyle:{font: '30px Arial', fill: '#FFFFFF', align: 'center'},
   gameOverFontStyle:{font: '60px Arial', fill: '#FF0000', align: 'center'}, };
 
 var gameAssets = new Object();
@@ -73,7 +73,7 @@ create: function () {
           this.scoreText = game.add.text(20, 10, "", fontAssets.counterFontStyle);
           this.scoreText.fixedToCamera = true;
 
-    this.hiscoreText = game.add.text(660, 10, "", fontAssets.counterFontStyle);
+    this.hiscoreText = game.add.text(658, 10, "", fontAssets.counterFontStyle);
     this.hiscoreText.fixedToCamera = true;
 
           this.gameOverText = game.add.sprite(
