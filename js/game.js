@@ -99,7 +99,8 @@ create: function () {
               [['assets/audio/correct1.ogg',
               'assets/audio/correct2.ogg',
                'assets/audio/correct3.ogg'],
-              ['assets/audio/wrong.ogg']]);
+               ['assets/audio/wrong.ogg'],
+              ['assets/audio/boom.ogg']]);
           this.gameOverDelay = null;
           this.winningDelay = null;
         },
@@ -198,6 +199,7 @@ hit: function(score) {
            this.car.setInMotion(false);
            this.gameOverText.alpha = 1;
            this.gameOverDelay = new Date().getTime();
+           this.audioInterface.playSound(2);  
          }
          if(this.score > 100) {
            if( this.winningDelay == null)
