@@ -51,6 +51,7 @@ function Car(gameProperties) {
     this.carSprite.body.rotation = 0;
     this.carSprite.body.x = this.gameProperties.gameWidth * 0.5
     this.carSprite.body.y = this.gameProperties.gameHeight - 200 ;
+    this.explosionAnimation = null;
   };
 
     this.neutral = function() {
@@ -86,7 +87,7 @@ function Car(gameProperties) {
     this.inMotion = inMotion;
     if(false==inMotion)
     {
-      this.explosion.animations.play('explode');
+      this.explosionAnimation = this.explosion.animations.play('explode');
       this.explosion.alpha = 1;
     }
     else
@@ -94,6 +95,18 @@ function Car(gameProperties) {
       this.explosion.alpha = 0;
     }
   };
+
+  this.updateAnimation = function()
+  {
+    if(this.explosionAnimation!=null)
+    {
+      if(this.explosionAnimation.isFinished)
+      {
+        this.explosionAnimation = null;
+        this.explosion.alpha = 0;
+      }
+    }
+  }
 
 };
 

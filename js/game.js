@@ -135,6 +135,7 @@ reset: function() {
        },
 
 update: function () {
+          this.car.updateAnimation();
           if(this.audioInterface.soundsInitialized==false ||
               this.audioInterface.tracksInitialized==false)
           { /* We are waiting for audio to load */
