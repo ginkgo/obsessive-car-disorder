@@ -99,9 +99,7 @@ create: function () {
               [['assets/audio/correct1.ogg',
               'assets/audio/correct2.ogg',
                'assets/audio/correct3.ogg'],
-              ['assets/audio/copy_correct1.ogg',
-              'assets/audio/copy_correct2.ogg',
-              'assets/audio/copy_correct3.ogg']]);
+              ['assets/audio/wrong.ogg']]);
         },
 
 update: function () {
